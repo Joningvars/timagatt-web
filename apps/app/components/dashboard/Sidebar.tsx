@@ -1,6 +1,6 @@
 import Image from 'next/image';
-import { Settings2 } from 'lucide-react';
 import type { Client, NavSection } from '@/lib/dashboard/data';
+import { SidebarSettingsButton } from '@/components/dashboard/SidebarSettingsButton';
 
 type SidebarProps = {
   navSections: NavSection[];
@@ -83,10 +83,7 @@ export function Sidebar({
         </div>
 
         <div className="space-y-1 border-t border-slate-50 pt-4">
-          <button className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-slate-500 transition-all hover:bg-slate-50 hover:text-slate-900">
-            <Settings2 className="h-4 w-4" strokeWidth={1.5} />
-            {t('sidebar.settings')}
-          </button>
+          <SidebarSettingsButton label={t('sidebar.settings')} />
         </div>
       </div>
 

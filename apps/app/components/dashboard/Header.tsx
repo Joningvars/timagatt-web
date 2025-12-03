@@ -1,4 +1,6 @@
 import Image from 'next/image';
+import { DashboardActions } from '@/components/dashboard/DashboardActions';
+import { DashboardUserMenu } from '@/components/dashboard/DashboardUserMenu';
 
 type DashboardHeaderProps = {
   name: string;
@@ -52,6 +54,11 @@ export function DashboardHeader({ name, t }: DashboardHeaderProps) {
           <span className="sr-only">Notifications</span>
           <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full border border-white bg-red-500" />
         </button>
+        <DashboardActions
+          exportLabel={t('actions.export')}
+          startLabel={t('actions.start')}
+        />
+        <DashboardUserMenu />
       </div>
     </header>
   );

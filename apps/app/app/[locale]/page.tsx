@@ -2,6 +2,6 @@
 
 import { redirect } from 'next/navigation';
 
-export default function LocaleRoot({ params }: { params: { locale: string } }) {
+export default async function LocaleRoot({ params }: { params: { locale: string } }) {
   redirect(`/${params.locale}/dashboard`);
 }

@@ -1,23 +1,24 @@
 import {
-  pgTable,
+  mysqlTable,
   serial,
   text,
+  varchar,
   timestamp,
-  integer,
+  int,
   boolean,
-  numeric,
-  pgEnum,
-} from "drizzle-orm/pg-core";
+  decimal,
+  mysqlEnum,
+} from "drizzle-orm/mysql-core";
 import { relations } from "drizzle-orm";
 
 // Enums
-export const roleEnum = pgEnum("role", ["owner", "admin", "member"]);
+export const roleEnum = mysqlEnum("role", ["owner", "admin", "member"]);
 
 // Users
-export const users = pgTable("users", {
-  id: text("id").primaryKey(), // Clerk ID
-  name: text("name"),
-  email: text("email").notNull(),
+export const users = mysqlTable("users", {
+  id: varchar("id", { length: 191 }).primaryKey(), // Clerk ID
+  name: varchar("name", { length: 191 }),
+  email: varchar("email", { length: 191 }).notNull(),
   imageUrl: text("image_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -31,13 +32,13 @@ export const usersRelations = relations(users, ({ many }) => ({
 }));
 
 // Organizations
-export const organizations = pgTable("organizations", {
+export const organizations = mysqlTable("organizations", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
-  slug: text("slug").unique().notNull(),
+  name: varchar("name", { length: 191 }).notNull(),
+  slug: varchar("slug", { length: 191 }).unique().notNull(),
   imageUrl: text("image_url"),
-  stripeCustomerId: text("stripe_customer_id"),
-  plan: text("plan").default("free").notNull(),
+  stripeCustomerId: varchar("stripe_customer_id", { length: 191 }),
+  plan: varchar("plan", { length: 191 }).default("free").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -48,15 +49,15 @@ export const organizationsRelations = relations(organizations, ({ many }) => ({
 }));
 
 // Organization Members
-export const organizationMembers = pgTable("organization_members", {
+export const organizationMembers = mysqlTable("organization_members", {
   id: serial("id").primaryKey(),
-  organizationId: integer("organization_id")
+  organizationId: int("organization_id")
     .notNull()
     .references(() => organizations.id),
-  userId: text("user_id")
+  userId: varchar("user_id", { length: 191 })
     .notNull()
     .references(() => users.id),
-  role: roleEnum("role").default("member").notNull(),
+  role: mysqlEnum("role", ["owner", "admin", "member"]).default("member").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -72,13 +73,13 @@ export const organizationMembersRelations = relations(organizationMembers, ({ on
 }));
 
 // Projects
-export const projects = pgTable("projects", {
+export const projects = mysqlTable("projects", {
   id: serial("id").primaryKey(),
-  name: text("name").notNull(),
+  name: varchar("name", { length: 191 }).notNull(),
   description: text("description"),
-  color: text("color"),
-  organizationId: integer("organization_id").references(() => organizations.id),
-  userId: text("user_id").references(() => users.id), // For personal projects
+  color: varchar("color", { length: 64 }),
+  organizationId: int("organization_id").references(() => organizations.id),
+  userId: varchar("user_id", { length: 191 }).references(() => users.id), // For personal projects
   isArchived: boolean("is_archived").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -98,18 +99,18 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 }));
 
 // Time Entries
-export const timeEntries = pgTable("time_entries", {
+export const timeEntries = mysqlTable("time_entries", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
+  userId: varchar("user_id", { length: 191 })
     .notNull()
     .references(() => users.id),
-  projectId: integer("project_id")
+  projectId: int("project_id")
     .notNull()
     .references(() => projects.id),
   description: text("description"),
   startTime: timestamp("start_time").notNull(),
   endTime: timestamp("end_time"),
-  duration: integer("duration"), // in seconds (optional, can be calculated)
+  duration: int("duration"), // in seconds (optional, can be calculated)
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
@@ -126,16 +127,16 @@ export const timeEntriesRelations = relations(timeEntries, ({ one }) => ({
 }));
 
 // Expenses
-export const expenses = pgTable("expenses", {
+export const expenses = mysqlTable("expenses", {
   id: serial("id").primaryKey(),
-  userId: text("user_id")
+  userId: varchar("user_id", { length: 191 })
     .notNull()
     .references(() => users.id),
-  projectId: integer("project_id")
+  projectId: int("project_id")
     .notNull()
     .references(() => projects.id),
   description: text("description").notNull(),
-  amount: numeric("amount", { precision: 10, scale: 2 }).notNull(),
+  amount: decimal("amount", { precision: 10, scale: 2 }).notNull(),
   date: timestamp("date").notNull(),
   receiptUrl: text("receipt_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),

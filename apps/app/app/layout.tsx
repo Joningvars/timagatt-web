@@ -3,6 +3,7 @@ import type { ReactNode } from 'react';
 import { ClerkProvider } from '@clerk/nextjs';
 import { Geist, Geist_Mono } from 'next/font/google';
 import './globals.css';
+import { defaultLocale } from '@/src/i18n/config';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -19,9 +20,11 @@ export const metadata: Metadata = {
   description: 'Time management for individuals and companies',
 };
 
+const dashboardPath = `/${defaultLocale}/dashboard`;
+
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <ClerkProvider>
+    <ClerkProvider afterSignInUrl={dashboardPath} afterSignUpUrl={dashboardPath}>
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}

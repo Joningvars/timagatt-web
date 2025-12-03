@@ -21,9 +21,9 @@ import { Download, Play } from 'lucide-react';
 export default async function DashboardPage({
   params,
 }: {
-  params: { locale: string };
+  params: Promise<{ locale: string }>;
 }) {
-  const { locale } = params;
+  const { locale } = await params;
   const user = await currentUser();
   const t = await getTranslations({ locale, namespace: 'Dashboard' });
   const name = user?.firstName ?? t('fallbackName');

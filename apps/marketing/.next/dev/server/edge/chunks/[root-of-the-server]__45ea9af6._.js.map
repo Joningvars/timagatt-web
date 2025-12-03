@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": [],
+  "sections": [
+    {"offset": {"line": 16, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/apps/marketing/src/i18n/config.ts"],"sourcesContent":["export const locales = ['is', 'en'] as const;\nexport const defaultLocale = 'is';\nexport type AppLocale = (typeof locales)[number];\n\n"],"names":[],"mappings":";;;;;;AAAO,MAAM,UAAU;IAAC;IAAM;CAAK;AAC5B,MAAM,gBAAgB"}},
+    {"offset": {"line": 31, "column": 0}, "map": {"version":3,"sources":["turbopack:///[project]/apps/marketing/middleware.ts"],"sourcesContent":["import createMiddleware from \"next-intl/middleware\";\nimport { defaultLocale, locales } from \"./src/i18n/config\";\n\nconst intlMiddleware = createMiddleware({\n  locales,\n  defaultLocale,\n});\n\nexport const config = {\n  matcher: [\n    \"/((?!_next|[^?]*\\\\.(?:html?|css|js(?!on)|jpe?g|webp|png|gif|svg|ttf|woff2?|ico|csv|docx?|xlsx?|zip|webmanifest)).*)\",\n  ],\n};\n\nexport default intlMiddleware;\n\n"],"names":[],"mappings":";;;;;;AAAA;AACA;;;AAEA,MAAM,iBAAiB,IAAA,yMAAgB,EAAC;IACtC,SAAA,6JAAO;IACP,eAAA,mKAAa;AACf;AAEO,MAAM,SAAS;IACpB,SAAS;QACP;KACD;AACH;uCAEe"}}]
+}

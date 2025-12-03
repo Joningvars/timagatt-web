@@ -1,36 +1,35 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Timagatt Monorepo
+
+This repository now hosts two independent Next.js applications:
+
+- `apps/app` – the authenticated SaaS experience that powers `app.timagatt.is`. This app includes Clerk auth, dashboards, TanStack Query, Drizzle, etc.
+- `apps/marketing` – the public marketing site that powers `timagatt.is`, rendering the localized landing page without any auth dependencies.
 
 ## Getting Started
 
-First, run the development server:
+Install dependencies from the repo root (generates a single workspace lockfile):
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Then run either app:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+# run both dev servers in parallel
+npm run dev
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+# or individually
+npm run dev:app
+npm run dev:marketing
+```
 
-## Learn More
+Each application keeps its own `package.json`, Next configuration, middleware, and assets. Shared utilities can live under `packages/` in the future if needed.
 
-To learn more about Next.js, take a look at the following resources:
+## Deployments
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `apps/marketing` → `timagatt.is`
+- `apps/app` → `app.timagatt.is`
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Configure two separate hosting targets (e.g., Vercel projects) and point the respective domains at each build output. Since both apps use `next-intl`, remember to configure locale domains accordingly.
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.

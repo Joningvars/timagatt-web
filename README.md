@@ -33,3 +33,4 @@ Each application keeps its own `package.json`, Next configuration, middleware, a
 
 Configure two separate hosting targets (e.g., Vercel projects) and point the respective domains at each build output. Since both apps use `next-intl`, remember to configure locale domains accordingly.
 
+# timagatt-web

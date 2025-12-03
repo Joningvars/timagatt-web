@@ -15,9 +15,12 @@ export function LandingCta({ t }: LandingCtaProps) {
         <p className="relative z-10 mx-auto mb-10 max-w-xl text-lg text-purple-100">
           {t('cta.subtitle')}
         </p>
-        <button className="relative z-10 rounded-full bg-white px-8 py-4 font-bold text-purple-600 shadow-lg shadow-purple-900/20 transition hover:bg-purple-50">
+        <a
+          href="https://app.timagatt.is"
+          className="relative z-10 inline-flex rounded-full bg-white px-8 py-4 font-bold text-purple-600 shadow-lg shadow-purple-900/20 transition hover:bg-purple-50"
+        >
           {t('cta.button')}
-        </button>
+        </a>
       </div>
     </section>
   );

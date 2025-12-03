@@ -8,15 +8,16 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "i.pravatar.cc",
+        hostname: "img.clerk.com",
       },
       {
         protocol: "https",
-        hostname: "cdn.jsdelivr.net",
+        hostname: "i.pravatar.cc",
       },
     ],
   },
 };
 
 export default withNextIntl(nextConfig);
+
 

@@ -1,14 +1,7 @@
-import { getRequestConfig } from "next-intl/server";
-import { AppLocale, defaultLocale, locales } from "./src/i18n/config";
+import createNextIntlPlugin from "next-intl/plugin";
 
-export default getRequestConfig(async ({ locale }) => {
-  const normalizedLocale = locales.includes(locale as AppLocale)
-    ? (locale as AppLocale)
-    : defaultLocale;
+const withNextIntl = createNextIntlPlugin("./src/i18n/request.ts");
 
-  return {
-    locale: normalizedLocale,
-    messages: (await import(`./messages/${normalizedLocale}.json`)).default,
-  };
-});
+export default withNextIntl;
+
 

@@ -1,6 +1,7 @@
 'use client';
 
 import { Link } from '@/src/i18n/routing';
+import { Button } from '@/components/ui/button';
 
 type LandingHeaderProps = {
   isScrolled: boolean;
@@ -32,20 +33,11 @@ export function LandingHeader({ isScrolled, t }: LandingHeaderProps) {
             </Link>
           ))}
         </nav>
-        <div className="flex items-center gap-3">
-          <a
-            href="https://app.timagatt.is/sign-in"
-            className="rounded-full border border-slate-200 px-6 py-2.5 text-sm font-semibold text-slate-700 shadow-sm transition-all hover:border-purple-200 hover:bg-purple-50 hover:text-purple-700"
-          >
+        <Button variant="outline" className="rounded-full" asChild>
+          <a href="https://app.timagatt.is">
             {t('nav.login')}
           </a>
-          <a
-            href="https://app.timagatt.is"
-            className="hidden rounded-full bg-slate-900 px-6 py-2.5 text-sm font-semibold text-white shadow-sm transition hover:bg-slate-800 md:inline-flex"
-          >
-            {t('nav.dashboard')}
-          </a>
-        </div>
+        </Button>
       </div>
     </header>
   );

@@ -1,4 +1,6 @@
 import type { ReactNode } from "react";
+import { Providers } from "@/app/providers";
+import { Toaster } from "@/components/ui/sonner";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
@@ -16,8 +18,9 @@ export default async function LocaleLayout({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
+  const supportedLocales = routing.locales as string[];
 
-  if (!routing.locales.includes(locale)) {
+  if (!supportedLocales.includes(locale)) {
     notFound();
   }
 
@@ -25,8 +28,12 @@ export default async function LocaleLayout({
 
   return (
     <NextIntlClientProvider locale={locale} messages={messages}>
-      {children}
+      <Providers>
+        {children}
+        <Toaster />
+      </Providers>
     </NextIntlClientProvider>
   );
 }
+
 

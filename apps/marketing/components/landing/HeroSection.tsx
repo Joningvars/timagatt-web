@@ -38,7 +38,10 @@ export function HeroSection({ t }: HeroSectionProps) {
           {t('hero.subheadline')}
         </p>
         <div className="flex flex-col items-center gap-4 pt-4 sm:flex-row">
-          <button className="group flex h-14 items-center gap-2 rounded-full bg-[#8b5cf6] px-8 text-base font-bold text-white shadow-lg shadow-purple-500/30 transition hover:bg-[#7c3aed]">
+          <a
+            href="https://app.timagatt.is"
+            className="group flex h-14 items-center gap-2 rounded-full bg-[#8b5cf6] px-8 text-base font-bold text-white shadow-lg shadow-purple-500/30 transition hover:bg-[#7c3aed]"
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="20"
@@ -53,7 +56,7 @@ export function HeroSection({ t }: HeroSectionProps) {
               <path d="M12 5v14"></path>
             </svg>
             {t('hero.join_us')}
-          </button>
+          </a>
           <button className="h-14 rounded-full border border-purple-100 bg-purple-50 px-8 text-base font-bold text-purple-900 transition hover:bg-purple-100 hover:border-purple-200">
             {t('hero.preview_growth')}
           </button>

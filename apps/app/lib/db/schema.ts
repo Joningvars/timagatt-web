@@ -1,6 +1,5 @@
 import {
   mysqlTable,
-  serial,
   text,
   varchar,
   timestamp,
@@ -33,7 +32,7 @@ export const usersRelations = relations(users, ({ many }) => ({
 
 // Organizations
 export const organizations = mysqlTable("organizations", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 191 }).notNull(),
   slug: varchar("slug", { length: 191 }).unique().notNull(),
   imageUrl: text("image_url"),
@@ -50,7 +49,7 @@ export const organizationsRelations = relations(organizations, ({ many }) => ({
 
 // Organization Members
 export const organizationMembers = mysqlTable("organization_members", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   organizationId: int("organization_id")
     .notNull()
     .references(() => organizations.id),
@@ -74,7 +73,7 @@ export const organizationMembersRelations = relations(organizationMembers, ({ on
 
 // Projects
 export const projects = mysqlTable("projects", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   name: varchar("name", { length: 191 }).notNull(),
   description: text("description"),
   color: varchar("color", { length: 64 }),
@@ -100,7 +99,7 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
 
 // Time Entries
 export const timeEntries = mysqlTable("time_entries", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   userId: varchar("user_id", { length: 191 })
     .notNull()
     .references(() => users.id),
@@ -128,7 +127,7 @@ export const timeEntriesRelations = relations(timeEntries, ({ one }) => ({
 
 // Expenses
 export const expenses = mysqlTable("expenses", {
-  id: serial("id").primaryKey(),
+  id: int("id").autoincrement().primaryKey(),
   userId: varchar("user_id", { length: 191 })
     .notNull()
     .references(() => users.id),

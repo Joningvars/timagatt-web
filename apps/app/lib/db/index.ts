@@ -10,7 +10,16 @@ const {
   DB_NAME,
 } = process.env;
 
-const pool =
+if (
+  !DATABASE_URL &&
+  (!DB_HOST || !DB_USER || !DB_PASS || !DB_NAME || Number.isNaN(Number(DB_PORT)))
+) {
+  throw new Error(
+    "Database credentials are missing. Set DATABASE_URL or all of DB_HOST, DB_PORT, DB_USER, DB_PASS, DB_NAME.",
+  );
+}
+
+export const pool =
   DATABASE_URL != null
     ? mysql.createPool({
         uri: DATABASE_URL,

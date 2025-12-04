@@ -56,7 +56,7 @@ export function Sidebar({
                   aria-current={item.active ? 'page' : undefined}
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
                     item.active
-                      ? 'bg-purple-50 text-purple-700 shadow-inner shadow-purple-100'
+                      ? 'bg-purple-50 text-purple-700'
                       : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
                   }`}
                 >

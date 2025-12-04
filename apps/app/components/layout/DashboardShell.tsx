@@ -34,8 +34,8 @@ export function DashboardShell({
         items: section.items.map((item) => ({
           ...item,
           active:
-            item.href === '/'
-              ? pathname === '/' || pathname === ''
+            item.key === 'dashboard'
+              ? pathname === item.href || pathname === item.href.replace(/\/$/, '')
               : pathname.startsWith(item.href),
         })),
       })),

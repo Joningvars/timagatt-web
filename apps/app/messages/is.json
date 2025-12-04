@@ -72,7 +72,8 @@
     "header": {
       "title": "Tímavarsla",
       "subtitle": "Yfirlit vinnusvæðis",
-      "period": "{month} {year}"
+      "period": "{month} {year}",
+      "searchPlaceholder": "Leita í viðskiptavinum, færslum..."
     },
     "greeting": {
       "title": "Góðan dag, {name}! 👋",

@@ -6,6 +6,7 @@ import { useTranslations } from 'next-intl';
 
 import { ICONS, type SidebarNavSection } from '@/lib/dashboard/data';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
+import { LanguageSelector } from '@/components/dashboard/LanguageSelector';
 
 type DashboardHeaderProps = {
   navSections: SidebarNavSection[];
@@ -22,7 +23,7 @@ export function DashboardHeader({
 
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md">
-      <div className="flex items-center gap-4">
+      <div className="flex items-center gap-4 flex-1">
         <Sheet>
           <SheetTrigger className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:border-slate-300 hover:text-slate-900 md:hidden">
             <Menu className="h-5 w-5" />
@@ -71,12 +72,12 @@ export function DashboardHeader({
         </div>
       </div>
 
-      <div className="hidden flex-1 px-8 md:block lg:px-12">
-        <div className="relative max-w-md">
+      <div className="hidden flex-1 px-8 md:flex justify-center">
+        <div className="relative w-full max-w-md">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
           <input
             type="text"
-            placeholder="Search clients, entries..."
+            placeholder={t('header.searchPlaceholder')}
             className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-100"
           />
           <div className="absolute right-2 top-2 hidden items-center gap-1 rounded border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-slate-400 lg:flex">
@@ -86,7 +87,8 @@ export function DashboardHeader({
         </div>
       </div>
 
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3 flex-1 justify-end">
+        <LanguageSelector />
         <button className="relative rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600 cursor-pointer">
           <Bell className="h-5 w-5" />
           <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full border border-white bg-red-500" />

@@ -72,7 +72,8 @@
     "header": {
       "title": "Time Tracking",
       "subtitle": "Workspace overview",
-      "period": "{month} {year}"
+      "period": "{month} {year}",
+      "searchPlaceholder": "Search clients, entries..."
     },
     "greeting": {
       "title": "Good morning, {name}! 👋",

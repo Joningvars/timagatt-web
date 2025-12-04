@@ -10,10 +10,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <PosthogAnalyticsProvider>
-      <QueryClientProvider client={queryClient}>
+    <QueryClientProvider client={queryClient}>
         <PosthogIdentify />
-        {children}
-      </QueryClientProvider>
+      {children}
+    </QueryClientProvider>
     </PosthogAnalyticsProvider>
   );
 }

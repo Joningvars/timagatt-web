@@ -71,7 +71,7 @@
     "header": {
       "title": "Tímavarsla",
       "subtitle": "Yfirlit vinnusvæðis",
-      "period": "September 2023"
+      "period": "{month} {year}"
     },
     "greeting": {
       "title": "Góðan dag, {name}! 👋",

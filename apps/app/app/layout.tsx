@@ -20,11 +20,14 @@ export const metadata: Metadata = {
   description: 'Time management for individuals and companies',
 };
 
-const dashboardPath = `/${defaultLocale}/dashboard`;
+const dashboardPath = `/${defaultLocale}`;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <ClerkProvider afterSignInUrl={dashboardPath} afterSignUpUrl={dashboardPath}>
+    <ClerkProvider
+      signInForceRedirectUrl={dashboardPath}
+      signUpForceRedirectUrl={dashboardPath}
+    >
       <html lang="en">
         <body
           className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-x-hidden`}

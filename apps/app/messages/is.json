@@ -65,13 +65,14 @@
         "dashboard": "Mælaborð",
         "timesheets": "Tímaskráningar",
         "expenses": "Útgjöld",
-        "invoices": "Reikningar"
+        "invoices": "Reikningar",
+        "projects": "Verkefni"
       }
     },
     "header": {
       "title": "Tímavarsla",
       "subtitle": "Yfirlit vinnusvæðis",
-      "period": "September 2023"
+      "period": "{month} {year}"
     },
     "greeting": {
       "title": "Góðan dag, {name}! 👋",
@@ -79,7 +80,9 @@
     },
     "actions": {
       "export": "Flytja út skýrslu",
-      "start": "Ræsa tímamæli"
+      "start": "Ræsa tímamæli",
+      "delete": "Eyða",
+      "edit": "Breyta"
     },
     "stats": {
       "billable": "Heildargjaldtímar",
@@ -119,7 +122,35 @@
       "title": "Hvað viltu gera næst?",
       "description": "Bættu við tímaskráningu, fylgstu með útgjöldum eða stofnaðu nýtt verkefni til að hefja samstarf.",
       "back": "Til baka á forsíðu",
-      "create": "Stofna verkefni"
+      "create": "Stofna verkefni",
+      "track": "Skrá tíma"
+    },
+    "projects": {
+      "newProject": "Nýtt verkefni",
+      "projectName": "Heiti verkefnis",
+      "projectNamePlaceholder": "Sláðu inn heiti verkefnis",
+      "projectDescription": "Lýsing",
+      "projectDescriptionPlaceholder": "Sláðu inn lýsingu á verkefni",
+      "projectColor": "Litur",
+      "create": "Stofna",
+      "creating": "Stofna...",
+      "createSuccess": "Verkefni stofnað",
+      "newProjectDescription": "Stofnaðu nýtt verkefni til að halda utan um tíma og útgjöld."
+    },
+    "entries": {
+      "newEntry": "Ný tímaskráning",
+      "newEntryDescription": "Skráðu tíma handvirkt.",
+      "project": "Verkefni",
+      "selectProject": "Veldu verkefni",
+      "projects": "Verkefni",
+      "projectRequired": "Vinsamlegast veldu verkefni",
+      "description": "Lýsing",
+      "descriptionPlaceholder": "Hvað var unnið við?",
+      "startTime": "Upphafstími",
+      "endTime": "Lokatími",
+      "create": "Skrá tíma",
+      "creating": "Skrái...",
+      "createSuccess": "Tími skráður"
     }
   }
 }

@@ -1,21 +1,37 @@
+'use client';
+
 import Image from 'next/image';
+import { Search } from 'lucide-react';
+import { useTranslations } from 'next-intl';
 import type { RecentEntry } from '@/lib/dashboard/data';
+import { Input } from '@/components/ui/input';
+import { EntryActions } from '@/components/dashboard/EntryActions';
 
 type EntriesTableProps = {
   entries: RecentEntry[];
-  t: (key: string, values?: Record<string, any>) => string;
+  title?: string;
+  filterPlaceholder?: string;
 };
 
-export function EntriesTable({ entries, t }: EntriesTableProps) {
+export function EntriesTable({
+  entries,
+  title,
+  filterPlaceholder,
+}: EntriesTableProps) {
+  const t = useTranslations('Dashboard');
+
   return (
     <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm min-w-0">
       <div className="flex items-center justify-between border-b border-slate-100 p-6">
-        <h3 className="text-sm font-bold text-slate-900">{t('table.title')}</h3>
-        <div className="relative">
-          <input
+        <h3 className="text-sm font-bold text-slate-900">
+          {title ?? t('table.title')}
+        </h3>
+        <div className="relative w-48">
+          <Search className="pointer-events-none absolute left-2 top-2.5 h-3.5 w-3.5 text-slate-400" />
+          <Input
             type="text"
-            placeholder={t('table.filterPlaceholder')}
-            className="w-40 rounded-md border border-slate-200 bg-slate-50 py-1.5 pl-8 pr-3 text-[11px] font-medium focus:border-purple-300 focus:outline-none"
+            placeholder={filterPlaceholder ?? t('table.filterPlaceholder')}
+            className="h-8 bg-slate-50 pl-8 pr-3 text-xs"
           />
         </div>
       </div>
@@ -36,7 +52,7 @@ export function EntriesTable({ entries, t }: EntriesTableProps) {
           <tbody className="divide-y divide-slate-100">
             {entries.map((entry) => (
               <tr
-                key={`${entry.client}-${entry.project}`}
+                key={entry.id}
                 className="group transition hover:bg-slate-50/80"
               >
                 <td className="px-6 py-4">
@@ -94,14 +110,14 @@ export function EntriesTable({ entries, t }: EntriesTableProps) {
                   <span
                     className={`inline-flex items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-bold ${entry.status.color}`}
                   >
-                    <span className={`h-1.5 w-1.5 rounded-full ${entry.status.dot}`} />
+                    <span
+                      className={`h-1.5 w-1.5 rounded-full ${entry.status.dot}`}
+                    />
                     {t(entry.status.labelKey)}
                   </span>
                 </td>
                 <td className="px-6 py-4 text-right">
-                  <button className="text-slate-400 transition hover:text-purple-600">
-                    •••
-                  </button>
+                  <EntryActions entryId={entry.id} />
                 </td>
               </tr>
             ))}
@@ -111,4 +127,3 @@ export function EntriesTable({ entries, t }: EntriesTableProps) {
     </section>
   );
 }
-

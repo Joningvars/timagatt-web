@@ -71,7 +71,7 @@
     "header": {
       "title": "Time Tracking",
       "subtitle": "Workspace overview",
-      "period": "September 2023"
+      "period": "{month} {year}"
     },
     "greeting": {
       "title": "Good morning, {name}! 👋",

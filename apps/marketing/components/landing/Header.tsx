@@ -35,9 +35,9 @@ export function LandingHeader({ isScrolled, t }: LandingHeaderProps) {
         </nav>
         <Button variant="outline" className="rounded-full" asChild>
           <a href="https://app.timagatt.is">
-            {t('nav.login')}
+                {t('nav.login')}
           </a>
-        </Button>
+                </Button>
       </div>
     </header>
   );

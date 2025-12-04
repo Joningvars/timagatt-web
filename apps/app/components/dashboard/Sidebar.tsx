@@ -1,14 +1,20 @@
+'use client';
 import Image from 'next/image';
-import type { Client, NavSection } from '@/lib/dashboard/data';
+import Link from 'next/link';
+import {
+  ICONS,
+  type Client,
+  type SidebarNavSection,
+} from '@/lib/dashboard/data';
+import { useTranslations } from 'next-intl';
 import { SidebarSettingsButton } from '@/components/dashboard/SidebarSettingsButton';
 
 type SidebarProps = {
-  navSections: NavSection[];
+  navSections: SidebarNavSection[];
   clients: Client[];
   avatar: string;
   name: string;
   email: string;
-  t: (key: string, values?: Record<string, any>) => string;
 };
 
 export function Sidebar({
@@ -17,11 +23,11 @@ export function Sidebar({
   avatar,
   name,
   email,
-  t,
 }: SidebarProps) {
+  const t = useTranslations('Dashboard');
   return (
-    <aside className="hidden w-64 shrink-0 flex-col border-r border-slate-100 bg-white shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex">
-      <div className="flex h-16 items-center border-b border-slate-50 px-6">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-slate-100 bg-white shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex">
+      <div className="flex h-16 shrink-0 items-center border-b border-slate-50 px-6">
         <div className="flex items-center gap-2.5">
           <div className="grid grid-cols-2 gap-1">
             <div className="h-2.5 w-2.5 rounded-full bg-purple-600" />
@@ -41,24 +47,29 @@ export function Sidebar({
             <div className="mb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
               {t(section.titleKey)}
             </div>
-            {section.items.map((item) => (
-              <button
-                key={item.labelKey}
-                className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left transition-all ${
-                  item.active
-                    ? 'bg-purple-50 text-purple-700'
-                    : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
-                }`}
-              >
-                <item.icon className="h-4 w-4" strokeWidth={1.5} />
-                <span className="text-sm font-medium">{t(item.labelKey)}</span>
-                {item.badge ? (
-                  <span className="ml-auto rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
-                    {item.badge}
-                  </span>
-                ) : null}
-              </button>
-            ))}
+            {section.items.map((item) => {
+              const Icon = ICONS[item.iconKey];
+              return (
+                <Link
+                  key={item.key}
+                  href={item.href}
+                  aria-current={item.active ? 'page' : undefined}
+                  className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
+                    item.active
+                      ? 'bg-purple-50 text-purple-700 shadow-inner shadow-purple-100'
+                      : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                  }`}
+                >
+                  {Icon && <Icon className="h-4 w-4" strokeWidth={1.5} />}
+                  <span>{t(item.labelKey)}</span>
+                  {item.badge ? (
+                    <span className="ml-auto rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
+                      {item.badge}
+                    </span>
+                  ) : null}
+                </Link>
+              );
+            })}
           </div>
         ))}
 
@@ -67,7 +78,10 @@ export function Sidebar({
             <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
               {t('sidebar.clientsHeading')}
             </span>
-            <button className="text-slate-400 transition-colors hover:text-purple-600">
+            <button
+              className="text-slate-400 transition-colors hover:text-purple-600"
+              type="button"
+            >
               +
             </button>
           </div>
@@ -105,4 +119,3 @@ export function Sidebar({
     </aside>
   );
 }
-

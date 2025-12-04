@@ -19,7 +19,16 @@ if (
   );
 }
 
-export const pool =
+type GlobalWithDb = typeof globalThis & {
+  __dbPool?: mysql.Pool;
+  __drizzleDb?: any; // keep loose to avoid type conflicts between mysql2 types
+};
+
+const globalForDb = globalThis as GlobalWithDb;
+
+const pool =
+  globalForDb.__dbPool ??
+  (globalForDb.__dbPool =
   DATABASE_URL != null
     ? mysql.createPool({
         uri: DATABASE_URL,
@@ -42,6 +51,12 @@ export const pool =
         idleTimeout: 60_000,
         enableKeepAlive: true,
         keepAliveInitialDelay: 0,
-      });
+        }));
 
-export const db = drizzle(pool);
+import * as schema from "./schema";
+
+export const db =
+  globalForDb.__drizzleDb ??
+  (globalForDb.__drizzleDb = drizzle(pool, { schema, mode: "default" }));
+
+export { pool };

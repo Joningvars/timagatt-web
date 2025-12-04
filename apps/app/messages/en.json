@@ -65,13 +65,14 @@
         "dashboard": "Dashboard",
         "timesheets": "Timesheets",
         "expenses": "Expenses",
-        "invoices": "Invoices"
+        "invoices": "Invoices",
+        "projects": "Projects"
       }
     },
     "header": {
       "title": "Time Tracking",
       "subtitle": "Workspace overview",
-      "period": "September 2023"
+      "period": "{month} {year}"
     },
     "greeting": {
       "title": "Good morning, {name}! 👋",
@@ -79,7 +80,9 @@
     },
     "actions": {
       "export": "Export Report",
-      "start": "Start Timer"
+      "start": "Start Timer",
+      "delete": "Delete",
+      "edit": "Edit"
     },
     "stats": {
       "billable": "Total Billable Hours",
@@ -119,7 +122,35 @@
       "title": "What would you like to do next?",
       "description": "Add a time entry, track expenses, or create a new project to get the collaboration going.",
       "back": "Back to landing",
-      "create": "Create Project"
+      "create": "Create Project",
+      "track": "Add Time Entry"
+    },
+    "projects": {
+      "newProject": "New Project",
+      "projectName": "Project Name",
+      "projectNamePlaceholder": "Enter project name",
+      "projectDescription": "Description",
+      "projectDescriptionPlaceholder": "Enter project description",
+      "projectColor": "Color",
+      "create": "Create",
+      "creating": "Creating...",
+      "createSuccess": "Project created successfully",
+      "newProjectDescription": "Create a new project to track time and expenses."
+    },
+    "entries": {
+      "newEntry": "New Entry",
+      "newEntryDescription": "Log your time manually.",
+      "project": "Project",
+      "selectProject": "Select a project",
+      "projects": "Projects",
+      "projectRequired": "Please select a project",
+      "description": "Description",
+      "descriptionPlaceholder": "What did you work on?",
+      "startTime": "Start Time",
+      "endTime": "End Time",
+      "create": "Log Time",
+      "creating": "Logging...",
+      "createSuccess": "Time logged successfully"
     }
   }
 }

@@ -1,5 +1,6 @@
 'use client';
 
+import { useState, useEffect, useRef } from 'react';
 import { Bell, Menu, PanelsTopLeft, Search } from 'lucide-react';
 import Link from 'next/link';
 import { useTranslations } from 'next-intl';
@@ -7,6 +8,8 @@ import { useTranslations } from 'next-intl';
 import { ICONS, type SidebarNavSection } from '@/lib/dashboard/data';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { LanguageSelector } from '@/components/dashboard/LanguageSelector';
+import { performGlobalSearch } from '@/lib/actions';
+import { SearchResults } from '@/components/dashboard/SearchResults';
 
 type DashboardHeaderProps = {
   navSections: SidebarNavSection[];
@@ -21,8 +24,60 @@ export function DashboardHeader({
   const navItems = navSections.flatMap((section) => section.items);
   const dateDisplay = currentDate ?? '';
 
+  const [query, setQuery] = useState('');
+  const [results, setResults] = useState<{
+    projects: any[];
+    entries: any[];
+    expenses: any[];
+    features: any[];
+  } | null>(null);
+  const [showResults, setShowResults] = useState(false);
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const down = (e: KeyboardEvent) => {
+      if (e.key === 'k' && (e.metaKey || e.ctrlKey)) {
+        e.preventDefault();
+        inputRef.current?.focus();
+      }
+    };
+    document.addEventListener('keydown', down);
+    return () => document.removeEventListener('keydown', down);
+  }, []);
+
+  useEffect(() => {
+    const search = async () => {
+      if (query.length < 2) {
+        setResults(null);
+        return;
+      }
+
+      // Search features (client-side)
+      const matchedFeatures = navItems
+        .filter((item) =>
+          t(item.labelKey).toLowerCase().includes(query.toLowerCase())
+        )
+        .map((item) => ({
+          ...item,
+          label: t(item.labelKey),
+        }));
+
+      // Search data (server-side)
+      const data = await performGlobalSearch(query);
+      if ('error' in data) {
+        console.error(data.error);
+        return;
+      }
+      setResults({ ...data, features: matchedFeatures });
+      setShowResults(true);
+    };
+
+    const timeoutId = setTimeout(search, 300);
+    return () => clearTimeout(timeoutId);
+  }, [query]);
+
   return (
-    <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md">
       <div className="flex items-center gap-4 flex-1">
         <Sheet>
           <SheetTrigger className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:border-slate-300 hover:text-slate-900 md:hidden">
@@ -76,7 +131,20 @@ export function DashboardHeader({
         <div className="relative w-full max-w-md">
           <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
           <input
+            ref={inputRef}
             type="text"
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              setShowResults(true);
+            }}
+            onFocus={() => {
+              if (results) setShowResults(true);
+            }}
+            onBlur={() => {
+              // Delay hiding to allow click events on results
+              setTimeout(() => setShowResults(false), 200);
+            }}
             placeholder={t('header.searchPlaceholder')}
             className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-100"
           />
@@ -84,6 +152,14 @@ export function DashboardHeader({
             <span>⌘</span>
             <span>K</span>
           </div>
+          <SearchResults
+            results={results}
+            visible={showResults}
+            onSelect={() => {
+              setShowResults(false);
+              setQuery('');
+            }}
+          />
         </div>
       </div>
 

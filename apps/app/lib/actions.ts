@@ -6,7 +6,7 @@ import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { projects, timeEntries, users, organizations, expenses } from '@/lib/db/schema';
-import { getUserOrganization } from '@/lib/dashboard/queries';
+import { getUserOrganization, searchProjects, searchTimeEntries, searchExpenses } from '@/lib/dashboard/queries';
 
 // --- Schemas ---
 
@@ -283,5 +283,31 @@ export async function createExpense(data: z.infer<typeof createExpenseSchema>) {
     console.error('Failed to create expense:', error);
     return { error: 'Failed to create expense' };
   }
+}
+
+// SEARCH ACTION
+
+export async function performGlobalSearch(query: string) {
+  const { userId } = await auth();
+  if (!userId) {
+    return { error: 'Unauthorized', projects: [], entries: [], expenses: [] };
+  }
+
+  const membership = await getUserOrganization(userId);
+  if (!membership) {
+    return { error: 'No organization found', projects: [], entries: [], expenses: [] };
+  }
+
+  if (!query || query.length < 2) {
+    return { projects: [], entries: [], expenses: [] };
+  }
+
+  const [projects, entries, expenses] = await Promise.all([
+    searchProjects(membership.organizationId, query),
+    searchTimeEntries(membership.organizationId, query),
+    searchExpenses(membership.organizationId, query),
+  ]);
+
+  return { projects, entries, expenses };
 }
 

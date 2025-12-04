@@ -1,6 +1,6 @@
 import { format, formatDistanceToNow, subMonths, subWeeks, startOfWeek, endOfWeek, subDays, addDays } from "date-fns";
 import { is } from "date-fns/locale";
-import { eq, desc, sql, and, gte } from "drizzle-orm";
+import { eq, desc, sql, and, gte, like, or } from "drizzle-orm";
 
 import { db } from "@/lib/db";
 import {
@@ -518,4 +518,77 @@ export async function getInvoiceSummaries(organizationId: number) {
 export async function getRecentEntriesForOrganization(organizationId: number) {
   const rows = await getTimeEntriesForOrganization(organizationId);
   return buildRecentEntries(rows);
+}
+
+export async function searchProjects(organizationId: number, query: string) {
+  const rows = await db
+    .select({
+      id: projects.id,
+      name: projects.name,
+      description: projects.description,
+    })
+    .from(projects)
+    .where(
+      and(
+        eq(projects.organizationId, organizationId),
+        or(
+          like(projects.name, `%${query}%`),
+          like(projects.description, `%${query}%`)
+        )
+      )
+    )
+    .limit(5);
+
+  return rows;
+}
+
+export async function searchTimeEntries(organizationId: number, query: string) {
+  const rows = await db
+    .select({
+      id: timeEntries.id,
+      description: timeEntries.description,
+      projectName: projects.name,
+      date: timeEntries.startTime,
+    })
+    .from(timeEntries)
+    .innerJoin(projects, eq(projects.id, timeEntries.projectId))
+    .where(
+      and(
+        eq(projects.organizationId, organizationId),
+        or(
+          like(timeEntries.description, `%${query}%`),
+          sql`DATE_FORMAT(${timeEntries.startTime}, '%Y-%m-%d') LIKE ${`%${query}%`}`
+        )
+      )
+    )
+    .orderBy(desc(timeEntries.startTime))
+    .limit(5);
+
+  return rows;
+}
+
+export async function searchExpenses(organizationId: number, query: string) {
+  const rows = await db
+    .select({
+      id: expenses.id,
+      description: expenses.description,
+      amount: expenses.amount,
+      projectName: projects.name,
+      date: expenses.date,
+    })
+    .from(expenses)
+    .innerJoin(projects, eq(projects.id, expenses.projectId))
+    .where(
+      and(
+        eq(projects.organizationId, organizationId),
+        or(
+          like(expenses.description, `%${query}%`),
+          sql`DATE_FORMAT(${expenses.date}, '%Y-%m-%d') LIKE ${`%${query}%`}`
+        )
+      )
+    )
+    .orderBy(desc(expenses.date))
+    .limit(5);
+
+  return rows;
 }

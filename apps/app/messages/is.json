@@ -82,7 +82,9 @@
       "export": "Flytja út skýrslu",
       "start": "Ræsa tímamæli",
       "delete": "Eyða",
-      "edit": "Breyta"
+      "edit": "Breyta",
+      "addEntry": "Skrá tíma",
+      "logTime": "Skrá færslu"
     },
     "stats": {
       "billable": "Heildargjaldtímar",
@@ -144,6 +146,8 @@
       "selectProject": "Veldu verkefni",
       "projects": "Verkefni",
       "projectRequired": "Vinsamlegast veldu verkefni",
+      "dateRequired": "Dagsetning og upphafstími eru nauðsynleg",
+      "date": "Dagsetning",
       "description": "Lýsing",
       "descriptionPlaceholder": "Hvað var unnið við?",
       "startTime": "Upphafstími",
@@ -151,6 +155,22 @@
       "create": "Skrá tíma",
       "creating": "Skrái...",
       "createSuccess": "Tími skráður"
+    },
+    "expenses": {
+      "new": "Ný útgjöld",
+      "newDescription": "Skráðu ný útgjöld.",
+      "project": "Verkefni",
+      "selectProject": "Veldu verkefni",
+      "projects": "Verkefni",
+      "projectRequired": "Vinsamlegast veldu verkefni",
+      "description": "Lýsing",
+      "descriptionPlaceholder": "Fyrir hvað voru þessi útgjöld?",
+      "amount": "Upphæð",
+      "date": "Dagsetning",
+      "dateRequired": "Dagsetning er nauðsynleg",
+      "create": "Skrá útgjöld",
+      "creating": "Skrái...",
+      "createSuccess": "Útgjöld skráð"
     }
   }
 }

@@ -82,7 +82,9 @@
       "export": "Export Report",
       "start": "Start Timer",
       "delete": "Delete",
-      "edit": "Edit"
+      "edit": "Edit",
+      "addEntry": "Add Time Entry",
+      "logTime": "Log Time"
     },
     "stats": {
       "billable": "Total Billable Hours",
@@ -144,6 +146,8 @@
       "selectProject": "Select a project",
       "projects": "Projects",
       "projectRequired": "Please select a project",
+      "dateRequired": "Date and Start Time are required",
+      "date": "Date",
       "description": "Description",
       "descriptionPlaceholder": "What did you work on?",
       "startTime": "Start Time",
@@ -151,6 +155,22 @@
       "create": "Log Time",
       "creating": "Logging...",
       "createSuccess": "Time logged successfully"
+    },
+    "expenses": {
+      "new": "New Expense",
+      "newDescription": "Record a new expense.",
+      "project": "Project",
+      "selectProject": "Select project",
+      "projects": "Projects",
+      "projectRequired": "Please select a project",
+      "description": "Description",
+      "descriptionPlaceholder": "What was this expense for?",
+      "amount": "Amount",
+      "date": "Date",
+      "dateRequired": "Date is required",
+      "create": "Record Expense",
+      "creating": "Recording...",
+      "createSuccess": "Expense recorded"
     }
   }
 }

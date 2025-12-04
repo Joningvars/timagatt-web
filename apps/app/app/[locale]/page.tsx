@@ -87,7 +87,8 @@ export default async function DashboardPage({
               </div>
               <DashboardActions
                 exportLabel={t('actions.export')}
-                startLabel={t('actions.start')}
+                startLabel={t('actions.addEntry')}
+                projects={dashboardData.projects}
               />
             </section>
 

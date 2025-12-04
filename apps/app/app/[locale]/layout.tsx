@@ -7,6 +7,8 @@ import { notFound } from 'next/navigation';
 import { routing } from '@/src/i18n/routing';
 import { DashboardShell } from '@/components/layout/DashboardShell';
 import { currentUser } from '@clerk/nextjs/server';
+import { ClerkProvider } from '@clerk/nextjs';
+import { isIS, enUS } from '@clerk/localizations';
 import {
   getSidebarClients,
   getSidebarSections,
@@ -60,18 +62,28 @@ export default async function LocaleLayout({
       : {};
 
   return (
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <Providers>
-        <DashboardShell
-          navSections={navSections}
-          clients={clients}
-          user={{ name: safeName, email: safeEmail, avatar: safeAvatar }}
-          dashboardMessages={dashboardMessages as Record<string, string>}
-        >
-          {children}
-        </DashboardShell>
-        <Toaster />
-      </Providers>
-    </NextIntlClientProvider>
+    <ClerkProvider
+      localization={locale === 'is' ? isIS : enUS}
+      signInForceRedirectUrl={`/${locale}`}
+      signUpForceRedirectUrl={`/${locale}`}
+    >
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <Providers>
+          <DashboardShell
+            navSections={navSections}
+            clients={clients}
+            user={{ name: safeName, email: safeEmail, avatar: safeAvatar }}
+            dashboardMessages={dashboardMessages as Record<string, string>}
+            currentDate={new Intl.DateTimeFormat(locale, {
+              month: 'long',
+              year: 'numeric',
+            }).format(new Date())}
+          >
+            {children}
+          </DashboardShell>
+          <Toaster />
+        </Providers>
+      </NextIntlClientProvider>
+    </ClerkProvider>
   );
 }

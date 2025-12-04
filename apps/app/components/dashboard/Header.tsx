@@ -9,15 +9,16 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 
 type DashboardHeaderProps = {
   navSections: SidebarNavSection[];
+  currentDate?: string;
 };
 
-const formatDate = (date: Date) => {
-  return date.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
-};
-
-export function DashboardHeader({ navSections }: DashboardHeaderProps) {
+export function DashboardHeader({
+  navSections,
+  currentDate,
+}: DashboardHeaderProps) {
   const t = useTranslations('Dashboard');
   const navItems = navSections.flatMap((section) => section.items);
+  const dateDisplay = currentDate ?? '';
 
   return (
     <header className="sticky top-0 z-10 flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md">
@@ -65,7 +66,7 @@ export function DashboardHeader({ navSections }: DashboardHeaderProps) {
           </h1>
           <span className="text-slate-300">|</span>
           <span className="text-sm font-medium text-slate-500">
-            {formatDate(new Date())}
+            {dateDisplay}
           </span>
         </div>
       </div>
@@ -86,7 +87,7 @@ export function DashboardHeader({ navSections }: DashboardHeaderProps) {
       </div>
 
       <div className="flex items-center gap-3">
-        <button className="relative rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600">
+        <button className="relative rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600 cursor-pointer">
           <Bell className="h-5 w-5" />
           <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full border border-white bg-red-500" />
           <span className="sr-only">Notifications</span>

@@ -1,13 +1,13 @@
 'use client';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useClerk } from '@clerk/nextjs';
 import {
   ICONS,
   type Client,
   type SidebarNavSection,
 } from '@/lib/dashboard/data';
 import { useTranslations } from 'next-intl';
-import { SidebarSettingsButton } from '@/components/dashboard/SidebarSettingsButton';
 
 type SidebarProps = {
   navSections: SidebarNavSection[];
@@ -25,6 +25,8 @@ export function Sidebar({
   email,
 }: SidebarProps) {
   const t = useTranslations('Dashboard');
+  const { openUserProfile } = useClerk();
+
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-slate-100 bg-white shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex">
       <div className="flex h-16 shrink-0 items-center border-b border-slate-50 px-6">
@@ -79,7 +81,7 @@ export function Sidebar({
               {t('sidebar.clientsHeading')}
             </span>
             <button
-              className="text-slate-400 transition-colors hover:text-purple-600"
+              className="text-slate-400 transition-colors hover:text-purple-600 cursor-pointer"
               type="button"
             >
               +
@@ -88,21 +90,21 @@ export function Sidebar({
           {clients.map((client) => (
             <button
               key={client.name}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-500 transition-all hover:bg-slate-50 hover:text-slate-900"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-500 transition-all hover:bg-slate-50 hover:text-slate-900 cursor-pointer"
             >
               <span className={`h-2 w-2 rounded-full ${client.color}`} />
               {client.name}
             </button>
           ))}
         </div>
-
-        <div className="space-y-1 border-t border-slate-50 pt-4">
-          <SidebarSettingsButton label={t('sidebar.settings')} />
-        </div>
       </div>
 
       <div className="border-t border-slate-100 p-4">
-        <div className="flex items-center gap-3 rounded-xl p-2 transition-colors hover:bg-slate-50">
+        <button
+          type="button"
+          onClick={() => openUserProfile()}
+          className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-slate-50 cursor-pointer"
+        >
           <Image
             src={avatar}
             alt={name}
@@ -114,7 +116,7 @@ export function Sidebar({
             <p className="truncate text-xs font-bold text-slate-900">{name}</p>
             <p className="truncate text-[10px] text-slate-500">{email}</p>
           </div>
-        </div>
+        </button>
       </div>
     </aside>
   );

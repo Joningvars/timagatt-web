@@ -5,7 +5,7 @@ import { auth } from '@clerk/nextjs/server';
 import { eq, and } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/lib/db';
-import { projects, timeEntries, users, organizations } from '@/lib/db/schema';
+import { projects, timeEntries, users, organizations, expenses } from '@/lib/db/schema';
 import { getUserOrganization } from '@/lib/dashboard/queries';
 
 // --- Schemas ---
@@ -30,6 +30,13 @@ const createTimeEntrySchema = z.object({
 
 const updateTimeEntrySchema = createTimeEntrySchema.partial().extend({
   id: z.number(),
+});
+
+const createExpenseSchema = z.object({
+  projectId: z.number(),
+  description: z.string().min(1, 'Description is required'),
+  amount: z.string().transform((val) => parseFloat(val)),
+  date: z.string().transform((str) => new Date(str)),
 });
 
 // --- Actions ---
@@ -233,5 +240,48 @@ export async function deleteTimeEntry(id: number) {
         console.error('Failed to delete time entry:', error);
         return { error: 'Failed to delete time entry' };
     }
+}
+
+// EXPENSE ACTIONS
+
+export async function createExpense(data: z.infer<typeof createExpenseSchema>) {
+  const { userId } = await auth();
+  if (!userId) {
+    return { error: 'Unauthorized' };
+  }
+
+  const project = await db.query.projects.findFirst({
+    where: eq(projects.id, data.projectId),
+    with: {
+        organization: true
+    }
+  });
+
+  if (!project) {
+      return { error: "Project not found" }
+  }
+  
+  const membership = await getUserOrganization(userId);
+
+  if (!membership || membership.organizationId !== project.organizationId) {
+      return { error: "Unauthorized for this project" }
+  }
+
+  try {
+    await db.insert(expenses).values({
+      userId: userId,
+      projectId: data.projectId,
+      description: data.description,
+      amount: String(data.amount),
+      date: data.date,
+    });
+
+    revalidatePath('/[locale]/utgjold');
+    revalidatePath('/[locale]/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to create expense:', error);
+    return { error: 'Failed to create expense' };
+  }
 }
 

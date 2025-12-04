@@ -32,13 +32,13 @@ export function EntryActions({ entryId }: EntryActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <button className="text-slate-400 transition hover:text-purple-600">
+        <button className="text-slate-400 transition hover:text-purple-600 cursor-pointer">
           <MoreHorizontal className="h-5 w-5" />
         </button>
       </DropdownMenuTrigger>
       <DropdownMenuContent align="end">
         <DropdownMenuItem
-          className="text-red-600 focus:bg-red-50 focus:text-red-700"
+          className="text-red-600 focus:bg-red-50 focus:text-red-700 cursor-pointer"
           onClick={handleDelete}
         >
           <Trash2 className="mr-2 h-4 w-4" />

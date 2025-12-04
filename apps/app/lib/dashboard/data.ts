@@ -89,6 +89,11 @@ export type ChartStackConfig = Record<
   }
 >;
 
+export type Project = {
+  id: number;
+  name: string;
+};
+
 export type RecentEntry = {
   id: number;
   client: string;

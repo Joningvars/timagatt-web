@@ -1,4 +1,5 @@
 import { format, formatDistanceToNow, subMonths, subWeeks, startOfWeek, endOfWeek, subDays, addDays } from "date-fns";
+import { is } from "date-fns/locale";
 import { eq, desc, sql, and, gte } from "drizzle-orm";
 
 import { db } from "@/lib/db";
@@ -83,7 +84,7 @@ function initialsFrom(value: string) {
 }
 
 function formatDate(date: Date) {
-  return format(date, "dd MMM");
+  return format(date, "dd MMM", { locale: is });
 }
 
 function localeHref(locale: string, segment: string) {
@@ -322,7 +323,7 @@ export async function getDashboardData(organizationId: number) {
       for (let i = 11; i >= 0; i--) {
         const d = subMonths(now, i);
         const key = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}`;
-        const label = format(d, "MMM");
+        const label = format(d, "MMM", { locale: is });
         map.set(key, { key, label });
       }
     } else {
@@ -331,7 +332,7 @@ export async function getDashboardData(organizationId: number) {
       for (let i = 0; i < 7; i++) {
         const d = addDays(startOfCurrentWeek, i);
         const key = format(d, "yyyy-MM-dd");
-        const label = format(d, "EEE"); // Mon, Tue, etc.
+        const label = format(d, "EEE", { locale: is }); // Mon, Tue, etc.
         map.set(key, { key, label });
       }
     }
@@ -465,14 +466,14 @@ export async function getDashboardData(organizationId: number) {
       id: `entry-${entry.id}`,
       title: `Time Logged: ${hoursFormatter.format(secondsToHours(durationSeconds(entry)))}klst`,
       description: `${entry.projectName ?? "Project"} — ${entry.description ?? "Details added"}`,
-      time: formatDistanceToNow(entry.startTime, { addSuffix: true }),
+      time: formatDistanceToNow(entry.startTime, { addSuffix: true, locale: is }),
       color: activityColors[index % activityColors.length],
     })),
     ...expenseRows.slice(0, 2).map((expense, index) => ({
       id: `expense-${expense.id}`,
       title: "Expense Recorded",
-      description: `${expense.description} (${currencyFormatter.format(Number(expense.amount ?? 0))})`,
-      time: expense.date ? formatDistanceToNow(expense.date, { addSuffix: true }) : "",
+      description: `${expense.projectName ?? "Project"} — ${expense.description} (${currencyFormatter.format(Number(expense.amount ?? 0))})`,
+      time: expense.date ? formatDistanceToNow(expense.date, { addSuffix: true, locale: is }) : "",
       color: activityColors[(index + 2) % activityColors.length],
     })),
   ];
@@ -488,6 +489,7 @@ export async function getDashboardData(organizationId: number) {
     activities,
     entries: recentEntries,
     clients,
+    projects: projectRows,
     greetingHours: hoursFormatter.format(secondsToHours(totalSeconds)),
   };
 }
@@ -509,7 +511,7 @@ export async function getInvoiceSummaries(organizationId: number) {
     project: row.projectName,
     amount: currencyFormatter.format(secondsToHours(Number(row.totalSeconds ?? 0)) * DEFAULT_RATE),
     status: index % 2 === 0 ? "sent" : "draft",
-    updatedAt: format(new Date(), "dd MMM"),
+    updatedAt: format(new Date(), "dd MMM", { locale: is }),
   }));
 }
 

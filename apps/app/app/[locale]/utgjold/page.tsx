@@ -1,18 +1,21 @@
 import { currentUser } from '@clerk/nextjs/server';
 import { getTranslations } from 'next-intl/server';
 import { format } from 'date-fns';
+import { is } from 'date-fns/locale';
 
 import { PageHeader } from '@/components/dashboard/PageHeader';
 import { ExpensesTable } from '@/components/dashboard/ExpensesTable';
 import { EmptyState } from '@/components/dashboard/EmptyState';
+import { CreateExpenseDialog } from '@/components/dashboard/CreateExpenseDialog';
 import {
   getExpensesForOrganization,
   getUserOrganization,
+  getProjectsForOrganization,
 } from '@/lib/dashboard/queries';
 
-const currencyFormatter = new Intl.NumberFormat('en-US', {
+const currencyFormatter = new Intl.NumberFormat('is-IS', {
   style: 'currency',
-  currency: 'USD',
+  currency: 'ISK',
 });
 
 export default async function ExpensesPage({
@@ -52,23 +55,28 @@ export default async function ExpensesPage({
     );
   }
 
-  const [expenseRows] = await Promise.all([
+  const [expenseRows, projects] = await Promise.all([
     getExpensesForOrganization(organization.organizationId),
+    getProjectsForOrganization(organization.organizationId),
   ]);
 
   const formattedExpenses = expenseRows.map((expense) => ({
     id: expense.id,
     description: expense.description,
     amount: currencyFormatter.format(Number(expense.amount ?? 0)),
-    date: expense.date ? format(expense.date, 'dd MMM') : '—',
+    date: expense.date ? format(expense.date, 'dd MMM', { locale: is }) : '—',
     project: expense.projectName ?? '—',
     user: expense.userName ?? '—',
   }));
 
   return (
     <div className="grid w-full flex-1 grid-cols-1 gap-6">
-        <PageHeader title="Útgjöld" subtitle="Eftirlit með kostnaði" />
-            {formattedExpenses.length ? (
+      <PageHeader
+        title="Útgjöld"
+        subtitle="Eftirlit með kostnaði"
+        actions={<CreateExpenseDialog projects={projects} />}
+      />
+      {formattedExpenses.length ? (
               <ExpensesTable rows={formattedExpenses} title="Nýjustu útgjöld" />
             ) : (
               <EmptyState

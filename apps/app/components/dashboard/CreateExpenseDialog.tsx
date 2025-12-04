@@ -24,28 +24,24 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createTimeEntry } from '@/lib/actions';
+import { createExpense } from '@/lib/actions';
 import { toast } from 'sonner';
 import { Plus } from 'lucide-react';
+import type { Project } from '@/lib/dashboard/data';
 
-type Project = {
-  id: number;
-  name: string;
-};
-
-type CreateTimeEntryDialogProps = {
+type CreateExpenseDialogProps = {
   projects: Project[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
 };
 
-export function CreateTimeEntryDialog({
+export function CreateExpenseDialog({
   projects,
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
-}: CreateTimeEntryDialogProps) {
+}: CreateExpenseDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
-  const t = useTranslations('Dashboard.entries');
+  const t = useTranslations('Dashboard.expenses');
   const [isLoading, setIsLoading] = useState(false);
   const [selectedProject, setSelectedProject] = useState<string>('');
 
@@ -60,39 +56,27 @@ export function CreateTimeEntryDialog({
     const formData = new FormData(event.currentTarget);
 
     const date = formData.get('date') as string;
-    const startTimeInput = formData.get('startTime') as string;
-    const endTimeInput = formData.get('endTime') as string;
+    const amount = formData.get('amount') as string;
     const description = formData.get('description') as string;
 
-    if (!date || !startTimeInput) {
+    if (!date) {
       toast.error(t('dateRequired'));
       setIsLoading(false);
       return;
     }
 
-    const startDateTimeString = `${date}T${startTimeInput}`;
-    const endDateTimeString = endTimeInput ? `${date}T${endTimeInput}` : undefined;
-
-    const data = {
-      projectId: Number(selectedProject),
-      description,
-      startTime: startDateTimeString,
-      endTime: endDateTimeString,
-    };
-
-    if (!data.projectId) {
+    if (!selectedProject) {
       toast.error(t('projectRequired'));
       setIsLoading(false);
       return;
     }
 
-    const payload = {
-      ...data,
-      startTime: new Date(data.startTime),
-      endTime: data.endTime ? new Date(data.endTime) : undefined,
-    };
-
-    const result = await createTimeEntry(payload);
+    const result = await createExpense({
+      projectId: Number(selectedProject),
+      description,
+      amount,
+      date,
+    });
 
     if (result.error) {
       toast.error(result.error);
@@ -107,17 +91,17 @@ export function CreateTimeEntryDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       {!isControlled && (
         <DialogTrigger asChild>
-          <Button size="sm" className="h-9 gap-2">
+          <Button size="sm" className="h-9 gap-2 cursor-pointer">
             <Plus className="h-4 w-4" />
-            {t('newEntry')}
+            {t('new')}
           </Button>
         </DialogTrigger>
       )}
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{t('newEntry')}</DialogTitle>
-            <DialogDescription>{t('newEntryDescription')}</DialogDescription>
+            <DialogTitle>{t('new')}</DialogTitle>
+            <DialogDescription>{t('newDescription')}</DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -126,7 +110,7 @@ export function CreateTimeEntryDialog({
                 value={selectedProject}
                 onValueChange={setSelectedProject}
               >
-                <SelectTrigger>
+                <SelectTrigger className="cursor-pointer">
                   <SelectValue placeholder={t('selectProject')} />
                 </SelectTrigger>
                 <SelectContent>
@@ -136,6 +120,7 @@ export function CreateTimeEntryDialog({
                       <SelectItem
                         key={project.id}
                         value={project.id.toString()}
+                        className="cursor-pointer"
                       >
                         {project.name}
                       </SelectItem>
@@ -150,37 +135,35 @@ export function CreateTimeEntryDialog({
                 id="description"
                 name="description"
                 placeholder={t('descriptionPlaceholder')}
-              />
-            </div>
-            <div className="grid gap-2">
-              <Label htmlFor="date">{t('date')}</Label>
-              <Input
-                id="date"
-                name="date"
-                type="date"
                 required
-                defaultValue={new Date().toISOString().slice(0, 10)}
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="startTime">{t('startTime')}</Label>
+                <Label htmlFor="date">{t('date')}</Label>
                 <Input
-                  id="startTime"
-                  name="startTime"
-                  type="time"
+                  id="date"
+                  name="date"
+                  type="date"
                   required
-                  defaultValue={new Date().toTimeString().slice(0, 5)}
+                  defaultValue={new Date().toISOString().slice(0, 10)}
+                  className="cursor-pointer"
                 />
               </div>
               <div className="grid gap-2">
-                <Label htmlFor="endTime">{t('endTime')}</Label>
-                <Input id="endTime" name="endTime" type="time" />
+                <Label htmlFor="amount">{t('amount')}</Label>
+                <Input
+                  id="amount"
+                  name="amount"
+                  type="number"
+                  step="0.01"
+                  required
+                />
               </div>
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
+            <Button type="submit" disabled={isLoading} className="cursor-pointer">
               {isLoading ? t('creating') : t('create')}
             </Button>
           </DialogFooter>
@@ -189,3 +172,4 @@ export function CreateTimeEntryDialog({
     </Dialog>
   );
 }
+

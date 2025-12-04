@@ -16,6 +16,7 @@ type DashboardShellProps = {
     avatar: string;
   };
   dashboardMessages: Record<string, string>;
+  currentDate?: string;
 };
 
 export function DashboardShell({
@@ -24,6 +25,7 @@ export function DashboardShell({
   clients,
   user,
   dashboardMessages,
+  currentDate,
 }: DashboardShellProps) {
   const pathname = usePathname() ?? '';
 
@@ -35,7 +37,8 @@ export function DashboardShell({
           ...item,
           active:
             item.key === 'dashboard'
-              ? pathname === item.href || pathname === item.href.replace(/\/$/, '')
+              ? pathname === item.href ||
+                pathname === item.href.replace(/\/$/, '')
               : pathname.startsWith(item.href),
         })),
       })),
@@ -57,7 +60,10 @@ export function DashboardShell({
         email={user.email}
       />
       <div className="flex w-full flex-1 flex-col overflow-hidden">
-        <DashboardHeader navSections={navWithActive} />
+        <DashboardHeader
+          navSections={navWithActive}
+          currentDate={currentDate}
+        />
         <main className="custom-scrollbar flex-1 overflow-y-auto px-4 py-4 md:px-6">
           <div className="grid gap-6">{children}</div>
         </main>

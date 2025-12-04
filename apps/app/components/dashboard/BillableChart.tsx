@@ -57,7 +57,7 @@ export function BillableChart({
               <button
                 key={m.key}
                 onClick={() => setMode(m.key as 'monthly' | 'weekly')}
-                className={`rounded-md px-2.5 py-1 transition ${
+                className={`rounded-md px-2.5 py-1 transition cursor-pointer ${
                   active
                     ? 'bg-purple-600 text-white shadow-sm shadow-purple-200'
                     : 'bg-slate-50 text-slate-500 hover:bg-slate-100'

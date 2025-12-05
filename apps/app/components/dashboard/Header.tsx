@@ -10,6 +10,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { LanguageSelector } from '@/components/dashboard/LanguageSelector';
 import { performGlobalSearch } from '@/lib/actions';
 import { SearchResults } from '@/components/dashboard/SearchResults';
+import { ModeToggle } from '@/components/mode-toggle';
 
 type DashboardHeaderProps = {
   navSections: SidebarNavSection[];
@@ -77,20 +78,17 @@ export function DashboardHeader({
   }, [query]);
 
   return (
-    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-slate-100 bg-white/80 px-6 backdrop-blur-md">
+    <header className="sticky top-0 z-50 flex h-16 shrink-0 items-center justify-between border-b border-border bg-background/80 px-6 backdrop-blur-md dark:bg-background/95">
       <div className="flex items-center gap-4 flex-1">
         <Sheet>
-          <SheetTrigger className="rounded-lg border border-slate-200 p-2 text-slate-500 transition hover:border-slate-300 hover:text-slate-900 md:hidden">
+          <SheetTrigger className="rounded-lg border border-border p-2 text-muted-foreground transition hover:border-input hover:text-foreground md:hidden">
             <Menu className="h-5 w-5" />
             <span className="sr-only">Toggle menu</span>
           </SheetTrigger>
-          <SheetContent
-            side="left"
-            className="w-64 border-r border-slate-100 p-0"
-          >
-            <div className="flex h-16 items-center gap-3 border-b border-slate-100 px-5">
+          <SheetContent side="left" className="w-64 border-r border-border p-0">
+            <div className="flex h-16 items-center gap-3 border-b border-border px-5">
               <PanelsTopLeft className="h-5 w-5 text-purple-600" />
-              <span className="text-base font-semibold text-slate-900">
+              <span className="text-base font-semibold text-foreground">
                 Timagatt
               </span>
             </div>
@@ -103,8 +101,8 @@ export function DashboardHeader({
                     href={item.href}
                     className={`flex items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition ${
                       item.active
-                        ? 'bg-purple-50 text-purple-700'
-                        : 'text-slate-600 hover:bg-slate-50 hover:text-slate-900'
+                        ? 'bg-purple-50 text-purple-700 dark:bg-purple-900/20 dark:text-purple-300'
+                        : 'text-muted-foreground hover:bg-secondary hover:text-foreground'
                     }`}
                   >
                     {Icon && <Icon className="h-4 w-4" strokeWidth={1.5} />}
@@ -117,11 +115,11 @@ export function DashboardHeader({
         </Sheet>
 
         <div className="hidden items-center gap-3 md:flex">
-          <h1 className="text-lg font-bold tracking-tight text-slate-900">
+          <h1 className="text-lg font-bold tracking-tight text-foreground">
             {t('header.title')}
           </h1>
-          <span className="text-slate-300">|</span>
-          <span className="text-sm font-medium text-slate-500">
+          <span className="text-muted">|</span>
+          <span className="text-sm font-medium text-muted-foreground">
             {dateDisplay}
           </span>
         </div>
@@ -129,7 +127,7 @@ export function DashboardHeader({
 
       <div className="hidden flex-1 px-8 md:flex justify-center">
         <div className="relative w-full max-w-md">
-          <Search className="absolute left-3 top-2.5 h-4 w-4 text-slate-400" />
+          <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
           <input
             ref={inputRef}
             type="text"
@@ -146,9 +144,9 @@ export function DashboardHeader({
               setTimeout(() => setShowResults(false), 200);
             }}
             placeholder={t('header.searchPlaceholder')}
-            className="h-9 w-full rounded-lg border border-slate-200 bg-slate-50 pl-9 pr-4 text-sm text-slate-700 placeholder:text-slate-400 focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-100"
+            className="h-9 w-full rounded-lg border border-input bg-secondary/50 pl-9 pr-4 text-sm text-foreground placeholder:text-muted-foreground focus:border-purple-300 focus:outline-none focus:ring-2 focus:ring-purple-100 dark:focus:ring-purple-900"
           />
-          <div className="absolute right-2 top-2 hidden items-center gap-1 rounded border border-slate-200 bg-white px-1.5 py-0.5 text-[10px] font-medium text-slate-400 lg:flex">
+          <div className="absolute right-2 top-2 hidden items-center gap-1 rounded border border-border bg-background px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground lg:flex">
             <span>⌘</span>
             <span>K</span>
           </div>
@@ -164,10 +162,11 @@ export function DashboardHeader({
       </div>
 
       <div className="flex items-center gap-3 flex-1 justify-end">
+        <ModeToggle />
         <LanguageSelector />
-        <button className="relative rounded-full p-2 text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-600 cursor-pointer">
+        <button className="relative rounded-full p-2 text-muted-foreground transition-colors hover:bg-secondary hover:text-foreground cursor-pointer">
           <Bell className="h-5 w-5" />
-          <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full border border-white bg-red-500" />
+          <span className="absolute right-2.5 top-2 h-2 w-2 rounded-full border border-background bg-red-500" />
           <span className="sr-only">Notifications</span>
         </button>
       </div>

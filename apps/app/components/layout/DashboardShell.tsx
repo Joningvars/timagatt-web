@@ -51,7 +51,7 @@ export function DashboardShell({
   );
 
   return (
-    <div className="flex h-screen w-full overflow-hidden bg-slate-50 text-slate-900">
+    <div className="flex h-screen w-full overflow-hidden bg-slate-50 text-foreground dark:bg-black">
       <Sidebar
         navSections={navWithActive}
         clients={clients}

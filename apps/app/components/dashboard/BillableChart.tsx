@@ -42,15 +42,15 @@ export function BillableChart({
   const seriesKeys = useMemo(() => Object.keys(config ?? {}), [config]);
 
   return (
-    <div className="lg:col-span-2 min-w-0 rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+    <div className="lg:col-span-2 min-w-0 rounded-2xl border border-border bg-card p-6 shadow-sm dark:bg-zinc-900/20">
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h3 className="text-sm font-bold text-slate-900">
+          <h3 className="text-sm font-bold text-card-foreground">
             {t('chart.title')}
           </h3>
-          <p className="mt-1 text-xs text-slate-400">{t('chart.subtitle')}</p>
+          <p className="mt-1 text-xs text-muted-foreground">{t('chart.subtitle')}</p>
         </div>
-        <div className="flex items-center rounded-lg bg-slate-100 p-1 text-[10px] font-bold">
+        <div className="flex items-center rounded-lg bg-muted p-1 text-[10px] font-bold">
           {MODES.map((m) => {
             const active = mode === m.key;
             return (
@@ -59,8 +59,8 @@ export function BillableChart({
                 onClick={() => setMode(m.key as 'monthly' | 'weekly')}
                 className={`rounded-md px-3 py-1 transition-all cursor-pointer ${
                   active
-                    ? 'bg-white text-slate-900 shadow-sm'
-                    : 'text-slate-500 hover:text-slate-900'
+                    ? 'bg-background text-foreground shadow-sm'
+                    : 'text-muted-foreground hover:text-foreground'
                 }`}
               >
                 {t(m.label)}

@@ -8,6 +8,7 @@ import {
   LayoutDashboard,
   Receipt,
   Timer,
+  Settings,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -19,7 +20,8 @@ export type IconKey =
   | 'projects'
   | 'billable'
   | 'unbilled'
-  | 'utilization';
+  | 'utilization'
+  | 'settings';
 
 export const ICONS: Record<IconKey, LucideIcon> = {
   dashboard: LayoutDashboard,
@@ -30,6 +32,7 @@ export const ICONS: Record<IconKey, LucideIcon> = {
   billable: Clock,
   unbilled: DollarSign,
   utilization: Activity,
+  settings: Settings,
 };
 
 export type StatCard = {
@@ -40,6 +43,7 @@ export type StatCard = {
   iconKey: IconKey;
   iconClass: string;
   cardHoverClass: string;
+  cardHoverClass?: string;
 };
 
 export type SidebarNavItem = {
@@ -92,6 +96,7 @@ export type ChartStackConfig = Record<
 export type Project = {
   id: number;
   name: string;
+  description: string;
 };
 
 export type RecentEntry = {
@@ -121,19 +126,19 @@ export const STAT_CARD_STYLES: Record<
   string,
   { iconKey: IconKey; iconClass: string; cardHoverClass: string }
 > = {
-  billable: { iconKey: 'billable', iconClass: 'bg-purple-50 text-purple-600', cardHoverClass: 'hover:shadow-purple-500/5' },
-  unbilled: { iconKey: 'unbilled', iconClass: 'bg-blue-50 text-blue-600', cardHoverClass: 'hover:shadow-blue-500/5' },
-  expenses: { iconKey: 'expenses', iconClass: 'bg-amber-50 text-amber-600', cardHoverClass: 'hover:shadow-amber-500/5' },
-  utilization: { iconKey: 'utilization', iconClass: 'bg-indigo-50 text-indigo-600', cardHoverClass: 'hover:shadow-indigo-500/5' },
+  billable: { iconKey: 'billable', iconClass: 'bg-purple-50 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400', cardHoverClass: 'hover:shadow-purple-500/5' },
+  unbilled: { iconKey: 'unbilled', iconClass: 'bg-blue-50 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400', cardHoverClass: 'hover:shadow-blue-500/5' },
+  expenses: { iconKey: 'expenses', iconClass: 'bg-amber-50 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400', cardHoverClass: 'hover:shadow-amber-500/5' },
+  utilization: { iconKey: 'utilization', iconClass: 'bg-indigo-50 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400', cardHoverClass: 'hover:shadow-indigo-500/5' },
 };
 
 export const CLIENT_COLOR_CLASSES = [
-  'bg-purple-100 text-purple-600',
-  'bg-emerald-100 text-emerald-600',
-  'bg-blue-100 text-blue-600',
-  'bg-amber-100 text-amber-600',
-  'bg-rose-100 text-rose-600',
-  'bg-indigo-100 text-indigo-600',
+  'bg-purple-100 text-purple-600 dark:bg-purple-500/10 dark:text-purple-400',
+  'bg-emerald-100 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400',
+  'bg-blue-100 text-blue-600 dark:bg-blue-500/10 dark:text-blue-400',
+  'bg-amber-100 text-amber-600 dark:bg-amber-500/10 dark:text-amber-400',
+  'bg-rose-100 text-rose-600 dark:bg-rose-500/10 dark:text-rose-400',
+  'bg-indigo-100 text-indigo-600 dark:bg-indigo-500/10 dark:text-indigo-400',
 ];
 
 export const DASHBOARD_RECENT_ENTRIES_LIMIT = 6;

@@ -28,8 +28,8 @@ export function Sidebar({
   const { openUserProfile } = useClerk();
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-slate-100 bg-white shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex">
-      <div className="flex h-16 shrink-0 items-center border-b border-slate-50 px-6">
+    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex dark:shadow-none">
+      <div className="flex h-16 shrink-0 items-center border-b border-sidebar-border px-6">
         <div className="flex items-center gap-2.5">
           <div className="grid grid-cols-2 gap-1">
             <div className="h-2.5 w-2.5 rounded-full bg-purple-600" />
@@ -37,7 +37,7 @@ export function Sidebar({
             <div className="h-2.5 w-2.5 rounded-full bg-purple-400/60" />
             <div className="h-2.5 w-2.5 rounded-full bg-purple-300/40" />
           </div>
-          <span className="text-lg font-bold tracking-tight text-slate-900">
+          <span className="text-lg font-bold tracking-tight text-sidebar-foreground">
             Timagatt
           </span>
         </div>
@@ -46,7 +46,7 @@ export function Sidebar({
       <div className="custom-scrollbar flex-1 space-y-8 overflow-y-auto px-4 py-6">
         {navSections.map((section) => (
           <div className="space-y-1" key={section.titleKey}>
-            <div className="mb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <div className="mb-2 px-3 text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
               {t(section.titleKey)}
             </div>
             {section.items.map((item) => {
@@ -58,14 +58,14 @@ export function Sidebar({
                   aria-current={item.active ? 'page' : undefined}
                   className={`flex w-full items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium transition-all ${
                     item.active
-                      ? 'bg-purple-50 text-purple-700'
-                      : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
+                      ? 'bg-purple-50 text-purple-700 dark:bg-white/5 dark:text-white'
+                      : 'text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground'
                   }`}
                 >
                   {Icon && <Icon className="h-4 w-4" strokeWidth={1.5} />}
                   <span>{t(item.labelKey)}</span>
                   {item.badge ? (
-                    <span className="ml-auto rounded-md bg-slate-100 px-2 py-0.5 text-[10px] font-bold text-slate-500">
+                    <span className="ml-auto rounded-md bg-sidebar-accent px-2 py-0.5 text-[10px] font-bold text-muted-foreground">
                       {item.badge}
                     </span>
                   ) : null}
@@ -77,11 +77,11 @@ export function Sidebar({
 
         <div className="space-y-1">
           <div className="mb-2 flex items-center justify-between px-3">
-            <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+            <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
               {t('sidebar.clientsHeading')}
             </span>
             <button
-              className="text-slate-400 transition-colors hover:text-purple-600 cursor-pointer"
+              className="text-muted-foreground transition-colors hover:text-purple-600 cursor-pointer"
               type="button"
             >
               +
@@ -90,7 +90,7 @@ export function Sidebar({
           {clients.map((client) => (
             <button
               key={client.name}
-              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-slate-500 transition-all hover:bg-slate-50 hover:text-slate-900 cursor-pointer"
+              className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-muted-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-foreground cursor-pointer"
             >
               <span className={`h-2 w-2 rounded-full ${client.color}`} />
               {client.name}
@@ -99,22 +99,22 @@ export function Sidebar({
         </div>
       </div>
 
-      <div className="border-t border-slate-100 p-4">
+      <div className="border-t border-sidebar-border p-4">
         <button
           type="button"
           onClick={() => openUserProfile()}
-          className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-slate-50 cursor-pointer"
+          className="flex w-full items-center gap-3 rounded-xl p-2 text-left transition-colors hover:bg-sidebar-accent cursor-pointer"
         >
           <Image
             src={avatar}
             alt={name}
             width={36}
             height={36}
-            className="rounded-full border border-slate-200 object-cover"
+            className="rounded-full border border-sidebar-border object-cover"
           />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-bold text-slate-900">{name}</p>
-            <p className="truncate text-[10px] text-slate-500">{email}</p>
+            <p className="truncate text-xs font-bold text-sidebar-foreground">{name}</p>
+            <p className="truncate text-[10px] text-muted-foreground">{email}</p>
           </div>
         </button>
       </div>

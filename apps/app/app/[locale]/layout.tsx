@@ -13,11 +13,14 @@ import {
   getSidebarClients,
   getSidebarSections,
   getUserOrganization,
+  getUser,
 } from '@/lib/dashboard/queries';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
 }
+
+import { dark } from '@clerk/themes';
 
 export default async function LocaleLayout({
   children,
@@ -38,6 +41,7 @@ export default async function LocaleLayout({
 
   const user = await currentUser();
   const membership = user?.id ? await getUserOrganization(user.id) : null;
+  const dbUser = user?.id ? await getUser(user.id) : null;
   const navSections = await getSidebarSections(locale, '');
   const clients =
     membership?.organizationId != null
@@ -61,14 +65,19 @@ export default async function LocaleLayout({
       ? (messages as any).Dashboard
       : {};
 
+  const isDark = dbUser?.theme === 'dark';
+
   return (
     <ClerkProvider
       localization={locale === 'is' ? isIS : enUS}
       signInForceRedirectUrl={`/${locale}`}
       signUpForceRedirectUrl={`/${locale}`}
+      appearance={{
+        baseTheme: isDark ? dark : undefined,
+      }}
     >
     <NextIntlClientProvider locale={locale} messages={messages}>
-      <Providers>
+      <Providers theme={dbUser?.theme || 'system'}>
           <DashboardShell
             navSections={navSections}
             clients={clients}

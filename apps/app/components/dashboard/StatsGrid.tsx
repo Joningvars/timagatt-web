@@ -25,7 +25,7 @@ export function StatsGrid({ stats }: StatsGridProps) {
         return (
           <div
             key={stat.titleKey}
-            className={`group rounded-2xl border border-slate-100 bg-white p-5 shadow-[0_2px_10px_-4px_rgba(0,0,0,0.05)] transition hover:shadow-lg ${stat.cardHoverClass}`}
+            className={`group rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:shadow-lg ${stat.cardHoverClass} dark:bg-zinc-900/40 dark:border-zinc-800/60`}
           >
             <div className="mb-4 flex items-start justify-between">
               <div
@@ -36,18 +36,18 @@ export function StatsGrid({ stats }: StatsGridProps) {
               <span
                 className={`inline-flex items-center gap-1 rounded-full px-2 py-1 text-[10px] font-bold ${
                   stat.trend === 'up'
-                    ? 'bg-emerald-50 text-emerald-600'
-                    : 'bg-red-50 text-red-600'
+                    ? 'bg-emerald-50 text-emerald-600 dark:bg-emerald-500/10 dark:text-emerald-400'
+                    : 'bg-red-50 text-red-600 dark:bg-red-500/10 dark:text-red-400'
                 }`}
               >
                 <StatTrendIcon trend={stat.trend} />
                 {stat.change}
               </span>
             </div>
-            <p className="text-xs font-semibold text-slate-500">
+            <p className="text-xs font-semibold text-muted-foreground">
               {t(stat.titleKey)}
             </p>
-            <p className="text-2xl font-bold text-slate-900">{stat.value}</p>
+            <p className="text-2xl font-bold text-card-foreground">{stat.value}</p>
           </div>
         );
       })}

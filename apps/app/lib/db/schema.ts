@@ -19,6 +19,7 @@ export const users = mysqlTable("users", {
   name: varchar("name", { length: 191 }),
   email: varchar("email", { length: 191 }).notNull(),
   imageUrl: text("image_url"),
+  theme: varchar("theme", { length: 32 }).default("system"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

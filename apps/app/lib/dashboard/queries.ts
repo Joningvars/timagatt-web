@@ -32,17 +32,17 @@ const DEFAULT_RATE = 20000;
 const STATUS_COLORS = {
   billed: {
     labelKey: "table.statuses.billed",
-    color: "bg-emerald-50 text-emerald-600 border-emerald-100",
+    color: "bg-emerald-50 text-emerald-600 border-emerald-100 dark:bg-emerald-500/10 dark:text-emerald-400 dark:border-emerald-500/20",
     dot: "bg-emerald-500",
   },
   unbilled: {
     labelKey: "table.statuses.unbilled",
-    color: "bg-amber-50 text-amber-600 border-amber-100",
+    color: "bg-amber-50 text-amber-600 border-amber-100 dark:bg-amber-500/10 dark:text-amber-400 dark:border-amber-500/20",
     dot: "bg-amber-500",
   },
   nonBillable: {
     labelKey: "table.statuses.nonBillable",
-    color: "bg-slate-100 text-slate-600 border-slate-200",
+    color: "bg-slate-100 text-slate-600 border-slate-200 dark:bg-zinc-800/50 dark:text-zinc-400 dark:border-zinc-700",
     dot: "bg-slate-400",
   },
 } as const;
@@ -103,6 +103,13 @@ export async function getSidebarSections(locale: string, activeKey: string): Pro
       })),
     },
   ];
+}
+
+export async function getUser(userId: string) {
+  const user = await db.query.users.findFirst({
+    where: eq(users.id, userId),
+  });
+  return user;
 }
 
 export async function getUserOrganization(userId: string) {

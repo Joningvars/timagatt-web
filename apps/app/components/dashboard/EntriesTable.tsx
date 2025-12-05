@@ -135,31 +135,31 @@ export function EntriesTable({
     searchQuery !== '';
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-slate-100 bg-white shadow-sm min-w-0">
-      <div className="flex items-center justify-between border-b border-slate-100 p-6">
-        <h3 className="text-sm font-bold text-slate-900">
+    <section className="overflow-hidden rounded-2xl border border-border bg-card shadow-sm min-w-0 dark:bg-zinc-900/20">
+      <div className="flex items-center justify-between border-b border-border p-6">
+        <h3 className="text-sm font-bold text-card-foreground">
           {title ?? t('table.title')}
         </h3>
         <div className="flex items-center gap-3">
           <div className="relative w-48">
-            <Search className="pointer-events-none absolute left-2 top-2.5 h-3.5 w-3.5 text-slate-400" />
+            <Search className="pointer-events-none absolute left-2 top-2.5 h-3.5 w-3.5 text-muted-foreground" />
             <Input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               placeholder={filterPlaceholder ?? t('table.filterPlaceholder')}
-              className="h-8 bg-slate-50 pl-8 pr-3 text-xs"
+              className="h-8 bg-muted/50 pl-8 pr-3 text-xs border-input focus:bg-background"
             />
           </div>
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <button className="flex h-8 items-center gap-2 rounded-lg border border-slate-200 bg-white px-3 text-xs font-medium text-slate-600 transition hover:bg-slate-50 cursor-pointer">
+              <button className="flex h-8 items-center gap-2 rounded-lg border border-input bg-background px-3 text-xs font-medium text-muted-foreground transition hover:bg-accent hover:text-accent-foreground cursor-pointer">
                 <Filter className="h-3.5 w-3.5" />
                 {t('table.filter.button')}
                 {(selectedProjects.size > 0 ||
                   selectedUsers.size > 0 ||
                   dateFilter !== 'all') && (
-                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 text-[10px] font-bold text-purple-600">
+                  <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 text-[10px] font-bold text-purple-600 dark:bg-purple-900/30 dark:text-purple-300">
                     {selectedProjects.size +
                       selectedUsers.size +
                       (dateFilter !== 'all' ? 1 : 0)}
@@ -274,7 +274,7 @@ export function EntriesTable({
       <div className="overflow-x-auto">
         <table className="w-full border-collapse text-left">
           <thead>
-            <tr className="border-b border-slate-100 bg-slate-50/50 text-[10px] font-bold uppercase tracking-wider text-slate-500">
+            <tr className="border-b border-border bg-muted/30 text-[10px] font-bold uppercase tracking-wider text-muted-foreground">
               <th className="px-6 py-3">{t('table.columns.clientProject')}</th>
               <th className="px-6 py-3">{t('table.columns.description')}</th>
               <th className="px-6 py-3">{t('table.columns.user')}</th>
@@ -285,12 +285,12 @@ export function EntriesTable({
               <th className="px-6 py-3" />
             </tr>
           </thead>
-          <tbody className="divide-y divide-slate-100">
+          <tbody className="divide-y divide-border">
             {filteredEntries.length > 0 ? (
               filteredEntries.map((entry) => (
                 <tr
                   key={entry.id}
-                  className="group transition hover:bg-slate-50/80"
+                  className="group transition hover:bg-muted/30"
                 >
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -310,17 +310,17 @@ export function EntriesTable({
                         }
                         className="text-left transition hover:opacity-75"
                       >
-                        <p className="text-xs font-bold text-slate-900 cursor-pointer hover:underline">
+                        <p className="text-xs font-bold text-foreground cursor-pointer hover:underline">
                           {entry.client}
                         </p>
-                        <p className="text-[10px] text-slate-500 cursor-pointer hover:underline">
+                        <p className="text-[10px] text-muted-foreground cursor-pointer hover:underline">
                           {entry.project}
                         </p>
                       </button>
                     </div>
                   </td>
                   <td className="max-w-[220px] px-6 py-4">
-                    <p className="truncate text-xs font-medium text-slate-700">
+                    <p className="truncate text-xs font-medium text-muted-foreground">
                       {entry.description}
                     </p>
                   </td>
@@ -341,25 +341,25 @@ export function EntriesTable({
                         alt={entry.user.name}
                         width={24}
                         height={24}
-                        className="rounded-full border border-slate-100 cursor-pointer"
+                        className="rounded-full border border-border cursor-pointer"
                       />
-                      <span className="text-xs font-medium text-slate-700 cursor-pointer hover:underline">
+                      <span className="text-xs font-medium text-foreground cursor-pointer hover:underline">
                         {entry.user.name}
                       </span>
                     </button>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-xs font-medium text-slate-600">
+                    <p className="text-xs font-medium text-muted-foreground">
                       {entry.date}
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-xs font-bold text-slate-900">
+                    <p className="text-xs font-bold text-foreground">
                       {entry.duration}
                     </p>
                   </td>
                   <td className="px-6 py-4">
-                    <p className="text-xs font-medium text-slate-600">
+                    <p className="text-xs font-medium text-muted-foreground">
                       {entry.amount}
                     </p>
                   </td>
@@ -382,7 +382,7 @@ export function EntriesTable({
               <tr>
                 <td
                   colSpan={8}
-                  className="px-6 py-8 text-center text-xs text-slate-500"
+                  className="px-6 py-8 text-center text-xs text-muted-foreground"
                 >
                   No entries found matching filters.
                 </td>

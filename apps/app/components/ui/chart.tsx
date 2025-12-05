@@ -52,17 +52,17 @@ function ChartTooltipContent(props: TooltipProps<number, string>) {
   if (!active || !payload?.length) return null;
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white px-3 py-2 text-xs shadow-sm">
-      <div className="mb-1 font-semibold text-slate-900">{label}</div>
+    <div className="rounded-lg border border-border bg-card px-3 py-2 text-xs shadow-sm">
+      <div className="mb-1 font-semibold text-foreground">{label}</div>
       <div className="space-y-1">
         {payload.map((item) => (
-          <div key={item.name} className="flex items-center gap-2 text-slate-600">
+          <div key={item.name} className="flex items-center gap-2 text-muted-foreground">
             <span
               className="h-2 w-2 rounded-full"
               style={{ backgroundColor: item.color ?? '#94a3b8' }}
             />
             <span className="font-medium">{item.name}</span>
-            <span className="text-slate-500">{item.value}</span>
+            <span className="text-muted-foreground">{item.value}</span>
           </div>
         ))}
       </div>

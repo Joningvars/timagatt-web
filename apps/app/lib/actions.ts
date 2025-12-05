@@ -311,3 +311,24 @@ export async function performGlobalSearch(query: string) {
   return { projects, entries, expenses };
 }
 
+export async function updateUserTheme(theme: string) {
+  const { userId } = await auth();
+  if (!userId) {
+    return { error: 'Unauthorized' };
+  }
+
+  try {
+    // First check if user exists in our DB (they should if they are logged in and have an org, but maybe not synced yet)
+    // We'll do an update. If it fails or affects 0 rows, we might need to handle it, but usually user row exists.
+    await db
+      .update(users)
+      .set({ theme })
+      .where(eq(users.id, userId));
+
+    revalidatePath('/');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to update user theme:', error);
+    return { error: 'Failed to update user theme' };
+  }
+}

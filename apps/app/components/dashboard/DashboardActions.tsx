@@ -63,7 +63,7 @@ export function DashboardActions({
       >
         <button
           className={cn(
-            'flex items-center gap-2 rounded-lg border border-slate-200 cursor-pointer  bg-white px-4 py-2 text-xs font-bold text-slate-600 shadow-sm transition hover:border-slate-300 hover:bg-slate-50',
+            'flex items-center gap-2 rounded-lg border border-border cursor-pointer bg-card px-4 py-2 text-xs font-bold text-foreground shadow-sm transition hover:border-input hover:bg-accent hover:text-accent-foreground',
             layout === 'stacked' && 'w-full justify-center rounded-full text-sm'
           )}
           onClick={handleExport}
@@ -77,7 +77,7 @@ export function DashboardActions({
           <DropdownMenuTrigger asChild>
             <button
               className={cn(
-                'flex items-center gap-2 cursor-pointer rounded-lg bg-slate-900 px-4 py-2 text-xs font-bold text-white shadow-md shadow-slate-200 transition hover:bg-slate-800',
+                'flex items-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90',
                 layout === 'stacked' &&
                   'w-full justify-center rounded-full text-sm'
               )}

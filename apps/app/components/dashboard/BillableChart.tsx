@@ -67,8 +67,8 @@ export function BillableChart({
               </button>
             );
           })}
-        </div>
-      </div>
+              </div>
+            </div>
 
       <div className="h-[320px]">
         <ChartContainer config={config} className="h-full w-full">
@@ -102,7 +102,7 @@ export function BillableChart({
                 fill={config[key]?.color ?? '#7c3aed'}
                 radius={idx === seriesKeys.length - 1 ? [6, 6, 0, 0] : 0}
               />
-            ))}
+        ))}
           </BarChart>
         </ChartContainer>
       </div>

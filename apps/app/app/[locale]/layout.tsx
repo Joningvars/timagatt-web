@@ -67,8 +67,8 @@ export default async function LocaleLayout({
       signInForceRedirectUrl={`/${locale}`}
       signUpForceRedirectUrl={`/${locale}`}
     >
-      <NextIntlClientProvider locale={locale} messages={messages}>
-        <Providers>
+    <NextIntlClientProvider locale={locale} messages={messages}>
+      <Providers>
           <DashboardShell
             navSections={navSections}
             clients={clients}
@@ -79,11 +79,11 @@ export default async function LocaleLayout({
               year: 'numeric',
             }).format(new Date())}
           >
-            {children}
+        {children}
           </DashboardShell>
-          <Toaster />
-        </Providers>
-      </NextIntlClientProvider>
+        <Toaster />
+      </Providers>
+    </NextIntlClientProvider>
     </ClerkProvider>
   );
 }

@@ -119,6 +119,17 @@
         "unbilled": "Óreikningsfært",
         "nonBillable": "Ekki gjaldfært",
         "billed": "Reikningsfært"
+      },
+      "filter": {
+        "button": "Sía",
+        "byJob": "Eftir verkefni",
+        "byDate": "Tímabil",
+        "byUser": "Eftir notanda",
+        "byStatus": "Eftir stöðu",
+        "allTime": "Allur tími",
+        "thisWeek": "Þessi vika",
+        "thisMonth": "Þessi mánuður",
+        "thisYear": "Þetta ár"
       }
     },
     "cta": {

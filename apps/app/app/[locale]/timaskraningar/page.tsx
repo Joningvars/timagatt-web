@@ -4,7 +4,7 @@ import { getTranslations } from 'next-intl/server';
 import { EntriesTable } from '@/components/dashboard/EntriesTable';
 import { PageHeader } from '@/components/dashboard/PageHeader';
 import { EmptyState } from '@/components/dashboard/EmptyState';
-import { CreateTimeEntryDialog } from '@/components/dashboard/CreateTimeEntryDialog';
+import { DashboardActions } from '@/components/dashboard/DashboardActions';
 import {
   getProjectsForOrganization,
   getRecentEntriesForOrganization,
@@ -58,13 +58,19 @@ export default async function TimesheetsPage({
       <PageHeader
         title="Tímaskráningar"
         subtitle="Allar færslur þínar"
-        actions={<CreateTimeEntryDialog projects={projects} />}
       />
       {entries.length ? (
         <EntriesTable
           entries={entries}
           title="Allar tímaskráningar"
           filterPlaceholder="Leita í færslum..."
+          actions={
+            <DashboardActions
+              exportLabel={t('actions.export')}
+              startLabel="Add Time Entry"
+              projects={projects}
+            />
+          }
         />
       ) : (
         <EmptyState

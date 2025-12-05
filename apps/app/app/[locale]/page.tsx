@@ -48,49 +48,49 @@ export default async function DashboardPage({
     <>
       {/* Empty state */}
       <Activity mode={hasData ? 'hidden' : 'visible'}>
-        <EmptyState
-          title={t('greeting.title', { name })}
-          description={t.rich('cta.description', {
-            strong: (chunks) => <strong>{chunks}</strong>,
-          })}
-          primaryAction={{
-            label: t('cta.create'),
-            href: `${localePrefix}/verkefni`,
-          }}
-          secondaryAction={{
-            label: t('cta.track'),
-            href: `${localePrefix}/timaskraningar`,
-            variant: 'outline',
-          }}
-          tertiaryAction={{
-            label: 'Populate Demo Data',
-            href: '/api/seed',
-            variant: 'ghost',
-          }}
-        />
+              <EmptyState
+                title={t('greeting.title', { name })}
+                description={t.rich('cta.description', {
+                  strong: (chunks) => <strong>{chunks}</strong>,
+                })}
+                primaryAction={{
+                  label: t('cta.create'),
+                  href: `${localePrefix}/verkefni`,
+                }}
+                secondaryAction={{
+                  label: t('cta.track'),
+                  href: `${localePrefix}/timaskraningar`,
+                  variant: 'outline',
+                }}
+                tertiaryAction={{
+                  label: 'Populate Demo Data',
+                  href: '/api/seed',
+                  variant: 'ghost',
+                }}
+              />
       </Activity>
 
       {/* Main content */}
       <Activity mode={hasData ? 'visible' : 'hidden'}>
         {dashboardData ? (
-          <>
-            <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
-              <div>
-                <p className="text-sm text-slate-500">
-                  {t('greeting.title', { name })}
-                </p>
-                <h2 className="text-2xl font-bold tracking-tight text-slate-900">
-                  {t('greeting.subtitle', {
+              <>
+                <section className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+                  <div>
+                    <p className="text-sm text-slate-500">
+                      {t('greeting.title', { name })}
+                    </p>
+                    <h2 className="text-2xl font-bold tracking-tight text-slate-900">
+                      {t('greeting.subtitle', {
                     hours: dashboardData.greetingHours ?? '0',
-                  })}
-                </h2>
-              </div>
-              <DashboardActions
-                exportLabel={t('actions.export')}
+                      })}
+                    </h2>
+                  </div>
+                  <DashboardActions
+                    exportLabel={t('actions.export')}
                 startLabel={t('actions.addEntry')}
                 projects={dashboardData.projects}
-              />
-            </section>
+                  />
+                </section>
 
             <div className="grid gap-4">
               <StatsGrid stats={dashboardData.stats} />
@@ -102,10 +102,10 @@ export default async function DashboardPage({
                   config={dashboardData.chartStack.config}
                 />
                 <ActivityTimeline activities={dashboardData.activities} />
-              </section>
+                </section>
 
               <EntriesTable entries={dashboardData.entries} />
-            </div>
+          </div>
           </>
         ) : null}
       </Activity>

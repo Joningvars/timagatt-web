@@ -103,6 +103,7 @@ export type RecentEntry = {
   description: string;
   user: { name: string; avatar: string };
   date: string;
+  rawDate: string;
   duration: string;
   amount: string;
   status: { labelKey: string; color: string; dot: string };

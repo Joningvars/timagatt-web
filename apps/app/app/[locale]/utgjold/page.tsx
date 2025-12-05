@@ -76,7 +76,7 @@ export default async function ExpensesPage({
         subtitle="Eftirlit með kostnaði"
         actions={<CreateExpenseDialog projects={projects} />}
       />
-      {formattedExpenses.length ? (
+            {formattedExpenses.length ? (
               <ExpensesTable rows={formattedExpenses} title="Nýjustu útgjöld" />
             ) : (
               <EmptyState

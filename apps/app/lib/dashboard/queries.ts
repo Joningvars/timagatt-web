@@ -204,6 +204,7 @@ function buildRecentEntries(rows: TimeEntryRow[], colorOffset = 0): RecentEntry[
         avatar: entry.userAvatar ?? "https://i.pravatar.cc/100?img=33",
       },
       date: formatDate(entry.startTime),
+      rawDate: entry.startTime.toISOString(),
       duration: `${hoursFormatter.format(secondsToHours(seconds))}klst`,
       amount: currencyFormatter.format(amountValue),
       status: STATUS_COLORS[statusKey],

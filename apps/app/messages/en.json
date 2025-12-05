@@ -119,6 +119,17 @@
         "unbilled": "Unbilled",
         "nonBillable": "Non-Billable",
         "billed": "Billed"
+      },
+      "filter": {
+        "button": "Filter",
+        "byJob": "By Job",
+        "byDate": "Date Range",
+        "byUser": "By User",
+        "byStatus": "By Status",
+        "allTime": "All Time",
+        "thisWeek": "This Week",
+        "thisMonth": "This Month",
+        "thisYear": "This Year"
       }
     },
     "cta": {

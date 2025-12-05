@@ -48,7 +48,9 @@ export function BillableChart({
           <h3 className="text-sm font-bold text-card-foreground">
             {t('chart.title')}
           </h3>
-          <p className="mt-1 text-xs text-muted-foreground">{t('chart.subtitle')}</p>
+          <p className="mt-1 text-xs text-muted-foreground">
+            {t('chart.subtitle')}
+          </p>
         </div>
         <div className="flex items-center rounded-lg bg-muted p-1 text-[10px] font-bold">
           {MODES.map((m) => {
@@ -67,8 +69,8 @@ export function BillableChart({
               </button>
             );
           })}
-              </div>
-            </div>
+        </div>
+      </div>
 
       <div className="h-[320px]">
         <ChartContainer config={config} className="h-full w-full">
@@ -102,7 +104,7 @@ export function BillableChart({
                 fill={config[key]?.color ?? '#7c3aed'}
                 radius={idx === seriesKeys.length - 1 ? [6, 6, 0, 0] : 0}
               />
-        ))}
+            ))}
           </BarChart>
         </ChartContainer>
       </div>

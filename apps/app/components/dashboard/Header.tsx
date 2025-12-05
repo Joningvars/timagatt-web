@@ -89,7 +89,7 @@ export function DashboardHeader({
             <div className="flex h-16 items-center gap-3 border-b border-border px-5">
               <PanelsTopLeft className="h-5 w-5 text-purple-600" />
               <span className="text-base font-semibold text-foreground">
-                Timagatt
+                Tímagátt
               </span>
             </div>
             <nav className="space-y-1 px-4 py-4">

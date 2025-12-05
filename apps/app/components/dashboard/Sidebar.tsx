@@ -46,7 +46,7 @@ export function Sidebar({
             />
           </div>
           <span className="text-lg font-bold tracking-tight text-sidebar-foreground">
-            Timagatt
+            Tímagátt
           </span>
         </div>
       </div>
@@ -121,8 +121,12 @@ export function Sidebar({
             className="rounded-full border border-sidebar-border object-cover"
           />
           <div className="min-w-0 flex-1">
-            <p className="truncate text-xs font-bold text-sidebar-foreground">{name}</p>
-            <p className="truncate text-[10px] text-muted-foreground">{email}</p>
+            <p className="truncate text-xs font-bold text-sidebar-foreground">
+              {name}
+            </p>
+            <p className="truncate text-[10px] text-muted-foreground">
+              {email}
+            </p>
           </div>
         </button>
       </div>

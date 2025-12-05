@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Timagatt',
+  title: 'Tímagatt',
   description: 'Time management for individuals and companies',
 };
 

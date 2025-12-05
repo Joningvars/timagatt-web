@@ -12,7 +12,7 @@
     "hero": {
       "social_proof": "{count}+ Happy Users",
       "headline": "Discover Project",
-      "headline_highlight": "Efficiency with Timagatt",
+      "headline_highlight": "Efficiency with Tímagátt",
       "subheadline": "Empower your team, simplify complexities, and achieve exceptional outcomes using our user-friendly project management platform.",
       "join_us": "Join with us",
       "preview_growth": "Preview Growth"
@@ -26,7 +26,7 @@
     "trusted_by": "Trusted by 100k+ company & Business",
     "detailed_features": {
       "title": "Streamline your workflow from start to finish",
-      "subtitle": "Timagatt handles the complexity so you can focus on the creativity. Build faster, ship sooner.",
+      "subtitle": "Tímagátt handles the complexity so you can focus on the creativity. Build faster, ship sooner.",
       "instant_updates": {
         "title": "Instant Updates",
         "desc": "Changes propagate in real-time across your entire workspace. No more refresh buttons."
@@ -42,7 +42,7 @@
     },
     "cta": {
       "title": "Ready to boost your efficiency?",
-      "subtitle": "Join thousands of teams who have already streamlined their project management with Timagatt.",
+      "subtitle": "Join thousands of teams who have already streamlined their project management with Tímagátt.",
       "button": "Get Started for Free"
     },
     "footer": {
@@ -51,7 +51,7 @@
       "company": "Company",
       "resources": "Resources",
       "legal": "Legal",
-      "rights": "© 2023 Timagatt Inc. All rights reserved.",
+      "rights": "© 2023 Tímagátt Inc. All rights reserved.",
       "system_status": "Systems Operational"
     }
   },

@@ -12,7 +12,7 @@
     "hero": {
       "social_proof": "{count}+ Ánægðir notendur",
       "headline": "Uppgötvaðu Skilvirkni",
-      "headline_highlight": "Verkefna með Timagatt",
+      "headline_highlight": "Verkefna með Tímagátt",
       "subheadline": "Efldu teymið þitt, einfaldaðu flækjustig og náðu framúrskarandi árangri með notendavæna verkefnastjórnunarkerfinu okkar.",
       "join_us": "Ganga til liðs við okkur",
       "preview_growth": "Skoða Vöxt"
@@ -26,7 +26,7 @@
     "trusted_by": "Traust af 100k+ fyrirtækjum & viðskiptum",
     "detailed_features": {
       "title": "Straumlínulagaðu vinnuferlið þitt frá upphafi til enda",
-      "subtitle": "Timagatt sér um flækjustigið svo þú getir einbeitt þér að sköpunargleðinni. Byggðu hraðar, sendu fyrr.",
+      "subtitle": "Tímagátt sér um flækjustigið svo þú getir einbeitt þér að sköpunargleðinni. Byggðu hraðar, sendu fyrr.",
       "instant_updates": {
         "title": "Augnabliksuppfærslur",
         "desc": "Breytingar uppfærast í rauntíma yfir allt vinnusvæðið þitt. Engir fleiri endurhleðsluhnappar."
@@ -42,7 +42,7 @@
     },
     "cta": {
       "title": "Tilbúinn til að auka skilvirkni þína?",
-      "subtitle": "Gakktu til liðs við þúsundir teyma sem hafa þegar straumlínulagað verkefnastjórnun sína með Timagatt.",
+      "subtitle": "Gakktu til liðs við þúsundir teyma sem hafa þegar straumlínulagað verkefnastjórnun sína með Tímagátt.",
       "button": "Byrjaðu Frítt"
     },
     "footer": {
@@ -51,7 +51,7 @@
       "company": "Fyrirtæki",
       "resources": "Auðlindir",
       "legal": "Lagalegt",
-      "rights": "© 2023 Timagatt Inc. Allur réttur áskilinn.",
+      "rights": "© 2023 Tímagátt Inc. Allur réttur áskilinn.",
       "system_status": "Kerfi Virk"
     }
   },

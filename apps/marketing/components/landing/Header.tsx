@@ -17,9 +17,13 @@ export function LandingHeader({ isScrolled, t }: LandingHeaderProps) {
     >
       <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
         <div className="flex cursor-pointer items-center gap-2.5">
-          <img src="/logos/logo.png" alt="Timagatt Logo" className="h-10 w-auto" />
+          <img
+            src="/logos/logo.png"
+            alt="Timagatt Logo"
+            className="h-10 w-auto"
+          />
           <span className="text-xl font-bold tracking-tight text-slate-900">
-            Timagatt
+            Tímagátt
           </span>
         </div>
         <nav className="hidden items-center gap-10 md:flex">
@@ -34,12 +38,9 @@ export function LandingHeader({ isScrolled, t }: LandingHeaderProps) {
           ))}
         </nav>
         <Button variant="outline" className="rounded-full" asChild>
-          <a href="https://app.timagatt.is">
-                {t('nav.login')}
-          </a>
-                </Button>
+          <a href="https://app.timagatt.is">{t('nav.login')}</a>
+        </Button>
       </div>
     </header>
   );
 }
-

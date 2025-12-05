@@ -101,7 +101,9 @@
     },
     "activity": {
       "title": "Recent Activity",
-      "viewAll": "View All History"
+      "viewAll": "View All History",
+      "timeLogged": "Time Logged: {hours}klst",
+      "expenseRecorded": "Expense Recorded"
     },
     "table": {
       "title": "Recent Time Entries",
@@ -166,11 +168,18 @@
       "endTime": "End Time",
       "create": "Log Time",
       "creating": "Logging...",
-      "createSuccess": "Time logged successfully"
+      "createSuccess": "Time logged successfully",
+      "edit": "Edit Entry",
+      "editDescription": "Update time entry details.",
+      "update": "Update Entry",
+      "updating": "Updating...",
+      "updateSuccess": "Entry updated"
     },
     "expenses": {
       "new": "New Expense",
       "newDescription": "Record a new expense.",
+      "edit": "Edit Expense",
+      "editDescription": "Update expense details.",
       "project": "Project",
       "selectProject": "Select project",
       "projects": "Projects",
@@ -182,7 +191,10 @@
       "dateRequired": "Date is required",
       "create": "Record Expense",
       "creating": "Recording...",
-      "createSuccess": "Expense recorded"
+      "createSuccess": "Expense recorded",
+      "update": "Update Expense",
+      "updating": "Updating...",
+      "updateSuccess": "Expense updated"
     }
   }
 }

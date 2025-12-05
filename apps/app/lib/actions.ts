@@ -111,10 +111,15 @@ export async function updateJob(id: number, formData: FormData) {
   }
 
   try {
-    await db
+    const result = await db
       .update(projects)
       .set(validatedFields.data)
       .where(and(eq(projects.id, id), eq(projects.organizationId, membership.organizationId)));
+      
+    // @ts-ignore - Accessing result header depends on driver but usually available
+    if (result && result[0] && result[0].affectedRows === 0) {
+        return { error: 'Job not found or unauthorized' };
+    }
 
     revalidatePath('/[locale]/verkefni');
     return { success: true };
@@ -136,9 +141,14 @@ export async function deleteJob(id: number) {
   }
 
   try {
-    await db
+    const result = await db
       .delete(projects)
       .where(and(eq(projects.id, id), eq(projects.organizationId, membership.organizationId)));
+      
+    // @ts-ignore
+    if (result && result[0] && result[0].affectedRows === 0) {
+         return { error: 'Job not found or unauthorized' };
+    }
 
     revalidatePath('/[locale]/verkefni');
     revalidatePath('/[locale]/dashboard');
@@ -208,6 +218,11 @@ export async function updateTimeEntry(id: number, data: Partial<z.infer<typeof c
     if (!userId) {
       return { error: 'Unauthorized' };
     }
+    
+    const membership = await getUserOrganization(userId);
+    if (!membership) {
+      return { error: 'No organization found' };
+    }
 
     let duration = data.duration;
     if (data.startTime && data.endTime) {
@@ -224,9 +239,23 @@ export async function updateTimeEntry(id: number, data: Partial<z.infer<typeof c
     }
 
     try {
+        // Check permission via project
+        const entry = await db.query.timeEntries.findFirst({
+            where: eq(timeEntries.id, id),
+            with: {
+                project: true
+            }
+        });
+
+        if (!entry) return { error: 'Entry not found' };
+        
+        if (entry.project.organizationId !== membership.organizationId) {
+             return { error: 'Unauthorized' };
+        }
+
         await db.update(timeEntries)
             .set(updateData)
-            .where(and(eq(timeEntries.id, id), eq(timeEntries.userId, userId)));
+            .where(eq(timeEntries.id, id));
 
         revalidatePath('/[locale]/timaskraningar');
         revalidatePath('/[locale]/dashboard');
@@ -243,9 +272,28 @@ export async function deleteTimeEntry(id: number) {
       return { error: 'Unauthorized' };
     }
 
+    const membership = await getUserOrganization(userId);
+    if (!membership) {
+      return { error: 'No organization found' };
+    }
+
     try {
+        // Check permission via project
+        const entry = await db.query.timeEntries.findFirst({
+            where: eq(timeEntries.id, id),
+            with: {
+                project: true
+            }
+        });
+
+        if (!entry) return { error: 'Entry not found' };
+        
+        if (entry.project.organizationId !== membership.organizationId) {
+             return { error: 'Unauthorized' };
+        }
+
         await db.delete(timeEntries)
-            .where(and(eq(timeEntries.id, id), eq(timeEntries.userId, userId)));
+            .where(eq(timeEntries.id, id));
 
         revalidatePath('/[locale]/timaskraningar');
         revalidatePath('/[locale]/dashboard');
@@ -305,13 +353,32 @@ export async function updateExpense(id: number, data: Partial<z.infer<typeof cre
       return { error: 'Unauthorized' };
     }
 
+    const membership = await getUserOrganization(userId);
+    if (!membership) {
+      return { error: 'No organization found' };
+    }
+
     try {
+        // Check permission via project
+        const expense = await db.query.expenses.findFirst({
+            where: eq(expenses.id, id),
+            with: {
+                project: true
+            }
+        });
+
+        if (!expense) return { error: 'Expense not found' };
+        
+        if (expense.project.organizationId !== membership.organizationId) {
+             return { error: 'Unauthorized' };
+        }
+
         await db.update(expenses)
             .set({
                 ...data,
                 amount: data.amount !== undefined ? String(data.amount) : undefined
             })
-            .where(and(eq(expenses.id, id), eq(expenses.userId, userId)));
+            .where(eq(expenses.id, id));
 
         revalidatePath('/[locale]/utgjold');
         revalidatePath('/[locale]/dashboard');
@@ -328,9 +395,28 @@ export async function deleteExpense(id: number) {
       return { error: 'Unauthorized' };
     }
 
+    const membership = await getUserOrganization(userId);
+    if (!membership) {
+      return { error: 'No organization found' };
+    }
+
     try {
+        // Check permission via project
+        const expense = await db.query.expenses.findFirst({
+            where: eq(expenses.id, id),
+            with: {
+                project: true
+            }
+        });
+
+        if (!expense) return { error: 'Expense not found' };
+        
+        if (expense.project.organizationId !== membership.organizationId) {
+             return { error: 'Unauthorized' };
+        }
+
         await db.delete(expenses)
-            .where(and(eq(expenses.id, id), eq(expenses.userId, userId)));
+            .where(eq(expenses.id, id));
 
         revalidatePath('/[locale]/utgjold');
         revalidatePath('/[locale]/dashboard');

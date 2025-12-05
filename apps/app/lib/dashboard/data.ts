@@ -67,7 +67,8 @@ export type Client = {
 
 export type ActivityItem = {
   id: string;
-  title: string;
+  titleKey: string;
+  titleArgs?: Record<string, string | number>;
   description: string;
   time: string;
   color: string;

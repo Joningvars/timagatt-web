@@ -121,7 +121,7 @@ export function CreateTimeEntryDialog({
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success(initialData ? 'Entry updated' : t('createSuccess'));
+      toast.success(initialData ? t('updateSuccess') : t('createSuccess'));
       setOpen(false);
     }
     setIsLoading(false);
@@ -142,9 +142,9 @@ export function CreateTimeEntryDialog({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEditing ? 'Edit Entry' : t('newEntry')}</DialogTitle>
+            <DialogTitle>{isEditing ? t('edit') : t('newEntry')}</DialogTitle>
             <DialogDescription>
-              {isEditing ? 'Update time entry details.' : t('newEntryDescription')}
+              {isEditing ? t('editDescription') : t('newEntryDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -226,13 +226,17 @@ export function CreateTimeEntryDialog({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isLoading}>
+            <Button 
+              type="submit" 
+              disabled={isLoading}
+              className="flex items-center justify-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90"
+            >
               {isLoading
                 ? isEditing
-                  ? 'Updating...'
+                  ? t('updating')
                   : t('creating')
                 : isEditing
-                ? 'Update Entry'
+                ? t('update')
                 : t('create')}
             </Button>
           </DialogFooter>

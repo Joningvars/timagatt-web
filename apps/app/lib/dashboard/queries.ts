@@ -478,7 +478,8 @@ export async function getDashboardData(organizationId: number) {
   const activities: ActivityItem[] = [
     ...entries.map((entry) => ({
       id: `entry-${entry.id}`,
-      title: `Time Logged: ${hoursFormatter.format(secondsToHours(durationSeconds(entry)))}klst`,
+      titleKey: "activity.timeLogged",
+      titleArgs: { hours: hoursFormatter.format(secondsToHours(durationSeconds(entry))) },
       description: `${entry.projectName ?? "Project"} — ${entry.description ?? "Details added"}`,
       time: formatDistanceToNow(entry.startTime, { addSuffix: true, locale: is }),
       rawDate: entry.startTime,
@@ -486,7 +487,7 @@ export async function getDashboardData(organizationId: number) {
     })),
     ...expenseRows.map((expense) => ({
       id: `expense-${expense.id}`,
-      title: "Expense Recorded",
+      titleKey: "activity.expenseRecorded",
       description: `${expense.projectName ?? "Project"} — ${expense.description} (${currencyFormatter.format(Number(expense.amount ?? 0))})`,
       time: expense.date ? formatDistanceToNow(expense.date, { addSuffix: true, locale: is }) : "",
       rawDate: expense.date,

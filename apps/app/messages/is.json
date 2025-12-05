@@ -101,7 +101,9 @@
     },
     "activity": {
       "title": "Nýleg virkni",
-      "viewAll": "Skoða alla sögu"
+      "viewAll": "Skoða alla sögu",
+      "timeLogged": "Tími skráður: {hours}klst",
+      "expenseRecorded": "Útgjöld skráð"
     },
     "table": {
       "title": "Nýlegar tímaskráningar",
@@ -166,11 +168,18 @@
       "endTime": "Lokatími",
       "create": "Skrá tíma",
       "creating": "Skrái...",
-      "createSuccess": "Tími skráður"
+      "createSuccess": "Tími skráður",
+      "edit": "Breyta tímaskráningu",
+      "editDescription": "Uppfærðu upplýsingar um tímaskráningu.",
+      "update": "Uppfæra tímaskráningu",
+      "updating": "Uppfæri...",
+      "updateSuccess": "Tímaskráning uppfærð"
     },
     "expenses": {
       "new": "Ný útgjöld",
       "newDescription": "Skráðu ný útgjöld.",
+      "edit": "Breyta útgjöldum",
+      "editDescription": "Uppfærðu upplýsingar um útgjöld.",
       "project": "Verkefni",
       "selectProject": "Veldu verkefni",
       "projects": "Verkefni",
@@ -182,7 +191,10 @@
       "dateRequired": "Dagsetning er nauðsynleg",
       "create": "Skrá útgjöld",
       "creating": "Skrái...",
-      "createSuccess": "Útgjöld skráð"
+      "createSuccess": "Útgjöld skráð",
+      "update": "Uppfæra útgjald",
+      "updating": "Uppfæri...",
+      "updateSuccess": "Útgjöld uppfærð"
     }
   }
 }

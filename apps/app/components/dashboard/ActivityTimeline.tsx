@@ -23,7 +23,8 @@ export function ActivityTimeline({ activities }: ActivityTimelineProps) {
             />
             <div>
               <p className="text-xs font-bold text-foreground">
-                {activity.title}
+                {/* @ts-ignore */}
+                {t(activity.titleKey, activity.titleArgs)}
               </p>
               <p className="mt-0.5 text-[11px] text-muted-foreground">
                 {activity.description}

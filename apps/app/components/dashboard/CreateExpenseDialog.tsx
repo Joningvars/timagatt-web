@@ -92,8 +92,8 @@ export function CreateExpenseDialog({
     const payload = {
       projectId: Number(selectedProject),
       description,
-      amount,
-      date,
+      amount: Number(amount),
+      date: new Date(date),
     };
 
     let result;
@@ -106,7 +106,7 @@ export function CreateExpenseDialog({
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success(initialData ? 'Expense updated' : t('createSuccess'));
+      toast.success(initialData ? t('updateSuccess') : t('createSuccess'));
       setOpen(false);
     }
     setIsLoading(false);
@@ -127,9 +127,9 @@ export function CreateExpenseDialog({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEditing ? 'Edit Expense' : t('new')}</DialogTitle>
+            <DialogTitle>{isEditing ? t('edit') : t('new')}</DialogTitle>
             <DialogDescription>
-              {isEditing ? 'Update expense details.' : t('newDescription')}
+              {isEditing ? t('editDescription') : t('newDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -198,13 +198,17 @@ export function CreateExpenseDialog({
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit" disabled={isLoading} className="cursor-pointer">
+            <Button
+              type="submit"
+              disabled={isLoading}
+              className="flex items-center justify-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90"
+            >
               {isLoading
                 ? isEditing
-                  ? 'Updating...'
+                  ? t('updating')
                   : t('creating')
                 : isEditing
-                ? 'Update Expense'
+                ? t('update')
                 : t('create')}
             </Button>
           </DialogFooter>

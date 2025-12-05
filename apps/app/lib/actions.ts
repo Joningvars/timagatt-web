@@ -77,8 +77,8 @@ export async function createJob(formData: FormData) {
       userId: userId, // Optional, depending on if it's personal or org-wide
     });
 
-    revalidatePath('/[locale]/verkefni');
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/verkefni', 'page');
+    revalidatePath('/[locale]/dashboard', 'page');
     return { success: true };
   } catch (error) {
     console.error('Failed to create job:', error);
@@ -121,7 +121,7 @@ export async function updateJob(id: number, formData: FormData) {
         return { error: 'Job not found or unauthorized' };
     }
 
-    revalidatePath('/[locale]/verkefni');
+    revalidatePath('/[locale]/verkefni', 'page');
     return { success: true };
   } catch (error) {
     console.error('Failed to update job:', error);
@@ -150,8 +150,8 @@ export async function deleteJob(id: number) {
          return { error: 'Job not found or unauthorized' };
     }
 
-    revalidatePath('/[locale]/verkefni');
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/verkefni', 'page');
+    revalidatePath('/[locale]/dashboard', 'page');
     return { success: true };
   } catch (error) {
     console.error('Failed to delete job:', error);
@@ -212,8 +212,8 @@ export async function createTimeEntry(data: z.infer<typeof createTimeEntrySchema
       duration: duration,
     });
 
-    revalidatePath('/[locale]/timaskraningar');
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/timaskraningar', 'page');
+    revalidatePath('/[locale]/dashboard', 'page');
     // @ts-ignore
     return { success: true, id: result[0].insertId };
   } catch (error) {
@@ -245,8 +245,8 @@ export async function stopTimer(data?: { description?: string; projectId?: numbe
       return { error: 'No running timer found' };
     }
 
-    revalidatePath('/[locale]/timaskraningar');
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/timaskraningar', 'page');
+    revalidatePath('/[locale]/dashboard', 'page');
     return { success: true };
   } catch (error) {
     console.error('Failed to stop timer:', error);
@@ -298,8 +298,8 @@ export async function resumeTimeEntry(id: number) {
       })
       .where(eq(timeEntries.id, id));
 
-    revalidatePath('/[locale]/timaskraningar');
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/timaskraningar', 'page');
+    revalidatePath('/[locale]/dashboard', 'page');
     
     return { success: true, id: id };
   } catch (error) {
@@ -352,8 +352,8 @@ export async function updateTimeEntry(id: number, data: Partial<z.infer<typeof c
             .set(updateData)
             .where(eq(timeEntries.id, id));
 
-        revalidatePath('/[locale]/timaskraningar');
-        revalidatePath('/[locale]/dashboard');
+        revalidatePath('/[locale]/timaskraningar', 'page');
+        revalidatePath('/[locale]/dashboard', 'page');
         return { success: true };
     } catch (error) {
         console.error('Failed to update time entry:', error);
@@ -390,8 +390,8 @@ export async function deleteTimeEntry(id: number) {
         await db.delete(timeEntries)
             .where(eq(timeEntries.id, id));
 
-        revalidatePath('/[locale]/timaskraningar');
-        revalidatePath('/[locale]/dashboard');
+        revalidatePath('/[locale]/timaskraningar', 'page');
+        revalidatePath('/[locale]/dashboard', 'page');
         return { success: true };
     } catch (error) {
         console.error('Failed to delete time entry:', error);
@@ -433,8 +433,8 @@ export async function createExpense(data: z.infer<typeof createExpenseSchema>) {
       date: data.date,
     });
 
-    revalidatePath('/[locale]/utgjold');
-    revalidatePath('/[locale]/dashboard');
+    revalidatePath('/[locale]/utgjold', 'page');
+    revalidatePath('/[locale]/dashboard', 'page');
     return { success: true };
   } catch (error) {
     console.error('Failed to create expense:', error);
@@ -475,8 +475,8 @@ export async function updateExpense(id: number, data: Partial<z.infer<typeof cre
             })
             .where(eq(expenses.id, id));
 
-        revalidatePath('/[locale]/utgjold');
-        revalidatePath('/[locale]/dashboard');
+        revalidatePath('/[locale]/utgjold', 'page');
+        revalidatePath('/[locale]/dashboard', 'page');
         return { success: true };
     } catch (error) {
         console.error('Failed to update expense:', error);
@@ -513,8 +513,8 @@ export async function deleteExpense(id: number) {
         await db.delete(expenses)
             .where(eq(expenses.id, id));
 
-        revalidatePath('/[locale]/utgjold');
-        revalidatePath('/[locale]/dashboard');
+        revalidatePath('/[locale]/utgjold', 'page');
+        revalidatePath('/[locale]/dashboard', 'page');
         return { success: true };
     } catch (error) {
         console.error('Failed to delete expense:', error);

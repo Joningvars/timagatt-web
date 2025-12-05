@@ -14,6 +14,18 @@ type ProjectRow = {
   totalExpenses: string;
 };
 
+import Link from 'next/link';
+import { useLocale } from 'next-intl';
+
+type ProjectRow = {
+  id: number;
+  name: string;
+  description?: string;
+  totalEntries: number;
+  totalHours: string;
+  totalExpenses: string;
+};
+
 type ProjectsGridProps = {
   rows: ProjectRow[];
   title: string;
@@ -22,6 +34,7 @@ type ProjectsGridProps = {
 
 export function ProjectsGrid({ rows, title, actions }: ProjectsGridProps) {
   const t = useTranslations('Dashboard');
+  const locale = useLocale();
   const [searchQuery, setSearchQuery] = useState('');
 
   const filteredRows = useMemo(() => {
@@ -55,9 +68,10 @@ export function ProjectsGrid({ rows, title, actions }: ProjectsGridProps) {
       <div className="grid gap-4 md:grid-cols-3">
         {filteredRows.length > 0 ? (
           filteredRows.map((project) => (
-            <div
+            <Link
               key={project.id}
-              className="rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-zinc-900/20"
+              href={`/${locale}/verkefni/${project.id}`}
+              className="block rounded-2xl border border-border bg-card p-5 shadow-sm transition hover:-translate-y-0.5 hover:shadow-lg dark:bg-zinc-900/20"
             >
               <div className="mb-4 flex items-center justify-between">
                 <div>
@@ -90,7 +104,7 @@ export function ProjectsGrid({ rows, title, actions }: ProjectsGridProps) {
                   </p>
                 </div>
               </div>
-            </div>
+            </Link>
           ))
         ) : (
           <div className="col-span-full py-8 text-center text-xs text-muted-foreground">

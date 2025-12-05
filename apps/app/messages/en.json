@@ -215,5 +215,39 @@
       "updating": "Updating...",
       "updateSuccess": "Expense updated"
     }
+  },
+  "Projects": {
+    "details": {
+      "noDescription": "No description",
+      "edit": "Edit Project",
+      "delete": "Delete Project"
+    },
+    "stats": {
+      "totalHours": "Total Hours",
+      "hoursLogged": "Hours logged all time",
+      "expenses": "Expenses",
+      "expensesLogged": "Total expenses recorded",
+      "billableAmount": "Billable Amount",
+      "estimatedValue": "Estimated value based on hours"
+    },
+    "tabs": {
+      "entries": "Time Entries",
+      "expenses": "Expenses",
+      "settings": "Settings"
+    },
+    "entries": {
+      "user": "User",
+      "description": "Description",
+      "date": "Date",
+      "duration": "Duration",
+      "noEntries": "No time entries found for this project"
+    },
+    "expenses": {
+      "user": "User",
+      "description": "Description",
+      "date": "Date",
+      "amount": "Amount",
+      "noExpenses": "No expenses found for this project"
+    }
   }
 }

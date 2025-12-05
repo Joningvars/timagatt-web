@@ -19,6 +19,8 @@ type SidebarProps = {
   email: string;
 };
 
+import { useLocale } from 'next-intl';
+
 export function Sidebar({
   navSections,
   clients,
@@ -27,6 +29,7 @@ export function Sidebar({
   email,
 }: SidebarProps) {
   const t = useTranslations('Dashboard');
+  const locale = useLocale();
   const { openUserProfile } = useClerk();
   const { isRunning, isPaused, elapsed, projectName, stop, pause, resume } =
     useTimer();
@@ -148,21 +151,22 @@ export function Sidebar({
             <span className="text-[10px] font-bold uppercase tracking-wider text-muted-foreground/70">
               {t('sidebar.clientsHeading')}
             </span>
-            <button
+            <Link
+              href={`/${locale}/verkefni`}
               className="text-muted-foreground transition-colors hover:text-purple-600 cursor-pointer"
-              type="button"
             >
               +
-            </button>
+            </Link>
           </div>
           {clients.map((client) => (
-            <button
-              key={client.name}
+            <Link
+              key={client.id}
+              href={`/${locale}/verkefni/${client.id}`}
               className="flex w-full items-center gap-3 rounded-lg px-3 py-2 text-left text-sm font-medium text-muted-foreground transition-all hover:bg-sidebar-accent hover:text-sidebar-foreground cursor-pointer"
             >
               <span className={`h-2 w-2 rounded-full ${client.color}`} />
               {client.name}
-            </button>
+            </Link>
           ))}
         </div>
       </div>

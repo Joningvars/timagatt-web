@@ -156,6 +156,7 @@ export async function getProjectsForOrganization(organizationId: number) {
 export async function getSidebarClients(organizationId: number): Promise<Client[]> {
   const rows = await db
     .select({
+      id: projects.id,
       name: projects.name,
     })
     .from(projects)
@@ -163,6 +164,7 @@ export async function getSidebarClients(organizationId: number): Promise<Client[
     .limit(CLIENT_COLOR_CLASSES.length);
 
   return rows.map((project, index) => ({
+    id: project.id,
     name: project.name,
     color: CLIENT_COLOR_CLASSES[index % CLIENT_COLOR_CLASSES.length],
   }));

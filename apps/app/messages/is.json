@@ -222,5 +222,39 @@
       "updating": "Uppfæri...",
       "updateSuccess": "Útgjöld uppfærð"
     }
+  },
+  "Projects": {
+    "details": {
+      "noDescription": "Engin lýsing",
+      "edit": "Breyta verkefni",
+      "delete": "Eyða verkefni"
+    },
+    "stats": {
+      "totalHours": "Heildarklukkustundir",
+      "hoursLogged": "Tímar skráðir alls",
+      "expenses": "Útgjöld",
+      "expensesLogged": "Heildarútgjöld skráð",
+      "billableAmount": "Gjaldhæf upphæð",
+      "estimatedValue": "Áætlað virði byggt á tímum"
+    },
+    "tabs": {
+      "entries": "Tímaskráningar",
+      "expenses": "Útgjöld",
+      "settings": "Stillingar"
+    },
+    "entries": {
+      "user": "Notandi",
+      "description": "Lýsing",
+      "date": "Dagsetning",
+      "duration": "Lengd",
+      "noEntries": "Engar tímaskráningar fundust fyrir þetta verkefni"
+    },
+    "expenses": {
+      "user": "Notandi",
+      "description": "Lýsing",
+      "date": "Dagsetning",
+      "amount": "Upphæð",
+      "noExpenses": "Engin útgjöld fundust fyrir þetta verkefni"
+    }
   }
 }

@@ -9,11 +9,13 @@ import { DashboardShell } from '@/components/layout/DashboardShell';
 import { currentUser } from '@clerk/nextjs/server';
 import { ClerkProvider } from '@clerk/nextjs';
 import { isIS, enUS } from '@clerk/localizations';
+import { TimerProvider } from '@/components/TimerProvider';
 import {
   getSidebarClients,
   getSidebarSections,
   getUserOrganization,
   getUser,
+  getRunningTimeEntry,
 } from '@/lib/dashboard/queries';
 
 export function generateStaticParams() {
@@ -48,6 +50,8 @@ export default async function LocaleLayout({
       ? await getSidebarClients(membership.organizationId)
       : [];
 
+  const runningEntry = user?.id ? await getRunningTimeEntry(user.id) : null;
+
   const safeName =
     user?.firstName ??
     user?.username ??
@@ -76,23 +80,28 @@ export default async function LocaleLayout({
         baseTheme: isDark ? dark : undefined,
       }}
     >
-    <NextIntlClientProvider locale={locale} messages={messages}>
-      <Providers theme={dbUser?.theme || 'system'}>
-          <DashboardShell
-            navSections={navSections}
-            clients={clients}
-            user={{ name: safeName, email: safeEmail, avatar: safeAvatar }}
-            dashboardMessages={dashboardMessages as Record<string, string>}
-            currentDate={new Intl.DateTimeFormat(locale, {
-              month: 'long',
-              year: 'numeric',
-            }).format(new Date())}
+      <NextIntlClientProvider locale={locale} messages={messages}>
+        <Providers theme={dbUser?.theme || 'system'}>
+          <TimerProvider
+            initialRunningEntry={runningEntry}
+            serverTime={new Date().toISOString()}
           >
-        {children}
-          </DashboardShell>
-        <Toaster />
-      </Providers>
-    </NextIntlClientProvider>
+            <DashboardShell
+              navSections={navSections}
+              clients={clients}
+              user={{ name: safeName, email: safeEmail, avatar: safeAvatar }}
+              dashboardMessages={dashboardMessages as Record<string, string>}
+              currentDate={new Intl.DateTimeFormat(locale, {
+                month: 'long',
+                year: 'numeric',
+              }).format(new Date())}
+            >
+              {children}
+            </DashboardShell>
+          </TimerProvider>
+          <Toaster />
+        </Providers>
+      </NextIntlClientProvider>
     </ClerkProvider>
   );
 }

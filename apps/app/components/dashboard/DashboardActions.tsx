@@ -1,6 +1,6 @@
 'use client';
 
-import { Download, Play, Plus, Timer } from 'lucide-react';
+import { Download, Play, Plus, Timer, Square, Pause } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import posthog from 'posthog-js';
 import { useTranslations } from 'next-intl';
@@ -13,6 +13,8 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { CreateTimeEntryDialog } from './CreateTimeEntryDialog';
 import type { Project } from '@/lib/dashboard/data';
+import { useTimer } from '@/components/TimerProvider';
+import { toast } from 'sonner';
 
 type DashboardActionsProps = {
   exportLabel: string;
@@ -32,25 +34,41 @@ export function DashboardActions({
   projects = [],
 }: DashboardActionsProps) {
   const t = useTranslations('Dashboard.actions');
+  const tTimer = useTranslations('Dashboard.timer');
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const {
+    isRunning,
+    isPaused,
+    start,
+    stop,
+    pause,
+    resume,
+    projectId,
+    startTime,
+    description,
+    id,
+  } = useTimer();
 
   const handleExport = useCallback(() => {
-    if (!hasPosthog) {
+    if (hasPosthog) {
+      posthog.capture('dashboard_export_clicked', {
+        format: 'csv',
+      });
+    }
+  }, []);
+
+  const handleStartTimer = useCallback(async () => {
+    if (hasPosthog) {
+      posthog.capture('dashboard_timer_started');
+    }
+
+    if (projects.length === 0) {
+      toast.error(t('createProjectRequired'));
       return;
     }
 
-    posthog.capture('dashboard_export_clicked', {
-      format: 'csv',
-    });
-  }, []);
-
-  const handleStartTimer = useCallback(() => {
-    if (!hasPosthog) {
-      return;
-    }
-
-    posthog.capture('dashboard_timer_started');
-  }, []);
+    setIsDialogOpen(true);
+  }, [projects]);
 
   return (
     <>
@@ -79,21 +97,69 @@ export function DashboardActions({
               className={cn(
                 'flex items-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90',
                 layout === 'stacked' &&
-                  'w-full justify-center rounded-full text-sm'
+                  'w-full justify-center rounded-full text-sm',
+                (isRunning || isPaused) &&
+                  'bg-red-600 hover:bg-red-700 text-white'
               )}
               type="button"
+              onClick={() => {
+                if (isPaused) {
+                  resume();
+                }
+              }}
             >
-              <Plus className="h-3.5 w-3.5" />
-              {startLabel}
+              {isPaused ? (
+                <>
+                  <Play className="h-3.5 w-3.5 fill-current" />
+                  {tTimer('resume')}
+                </>
+              ) : isRunning ? (
+                <>
+                  <Square className="h-3.5 w-3.5 fill-current" />
+                  {tTimer('stop')}
+                </>
+              ) : (
+                <>
+                  <Plus className="h-3.5 w-3.5" />
+                  {startLabel}
+                </>
+              )}
             </button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-48">
+            {isPaused && (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => resume()}
+              >
+                <Play className="mr-2 h-4 w-4 fill-current" />
+                <span>{tTimer('resume')}</span>
+              </DropdownMenuItem>
+            )}
+            {isRunning && (
+              <DropdownMenuItem
+                className="cursor-pointer"
+                onClick={() => pause()}
+              >
+                <Pause className="mr-2 h-4 w-4 fill-current" />
+                <span>{tTimer('pause')}</span>
+              </DropdownMenuItem>
+            )}
             <DropdownMenuItem
               className="cursor-pointer"
               onClick={handleStartTimer}
             >
-              <Timer className="mr-2 h-4 w-4" />
-              <span>{t('start')}</span>
+              {isRunning || isPaused ? (
+                <>
+                  <Square className="mr-2 h-4 w-4 fill-current text-red-500" />
+                  <span>{tTimer('stop')}</span>
+                </>
+              ) : (
+                <>
+                  <Timer className="mr-2 h-4 w-4" />
+                  <span>{t('start')}</span>
+                </>
+              )}
             </DropdownMenuItem>
             <DropdownMenuItem
               className="cursor-pointer"
@@ -110,6 +176,19 @@ export function DashboardActions({
         projects={projects}
         open={isDialogOpen}
         onOpenChange={setIsDialogOpen}
+        onStart={!isRunning && !isPaused ? start : undefined}
+        onStop={isRunning || isPaused ? stop : undefined}
+        initialData={
+          (isRunning || isPaused) && (id || projectId)
+            ? {
+                id: id ?? undefined,
+                projectId: projectId ?? 0,
+                startTime: startTime ?? new Date(),
+                endTime: new Date(), // Pause timer in dialog
+                description: description ?? '',
+              }
+            : undefined
+        }
       />
     </>
   );

@@ -2,7 +2,7 @@
 
 import { revalidatePath } from 'next/cache';
 import { auth } from '@clerk/nextjs/server';
-import { eq, and } from 'drizzle-orm';
+import { eq, and, sql } from 'drizzle-orm';
 import { z } from 'zod';
 import { db } from '@/lib/db';
 import { projects, timeEntries, users, organizations, expenses } from '@/lib/db/schema';
@@ -195,7 +195,15 @@ export async function createTimeEntry(data: z.infer<typeof createTimeEntrySchema
   }
 
   try {
-    await db.insert(timeEntries).values({
+    // Stop any running timer first if this is a new running timer (endTime is null)
+    if (!data.endTime) {
+      await db
+        .update(timeEntries)
+        .set({ endTime: new Date(), duration: sql`TIMESTAMPDIFF(SECOND, ${timeEntries.startTime}, NOW())` })
+        .where(and(eq(timeEntries.userId, userId), sql`${timeEntries.endTime} IS NULL`));
+    }
+
+    const result = await db.insert(timeEntries).values({
       userId: userId,
       projectId: data.projectId,
       description: data.description,
@@ -206,10 +214,97 @@ export async function createTimeEntry(data: z.infer<typeof createTimeEntrySchema
 
     revalidatePath('/[locale]/timaskraningar');
     revalidatePath('/[locale]/dashboard');
-    return { success: true };
+    // @ts-ignore
+    return { success: true, id: result[0].insertId };
   } catch (error) {
     console.error('Failed to create time entry:', error);
     return { error: 'Failed to create time entry' };
+  }
+}
+
+export async function stopTimer(data?: { description?: string; projectId?: number; endTime?: Date }) {
+  const { userId } = await auth();
+  if (!userId) {
+    return { error: 'Unauthorized' };
+  }
+
+  try {
+    const endTime = data?.endTime || new Date();
+    const result = await db
+      .update(timeEntries)
+      .set({ 
+        endTime: endTime,
+        description: data?.description,
+        projectId: data?.projectId,
+        duration: sql`TIMESTAMPDIFF(SECOND, ${timeEntries.startTime}, ${endTime})` 
+      })
+      .where(and(eq(timeEntries.userId, userId), sql`${timeEntries.endTime} IS NULL`));
+
+    // @ts-ignore
+    if (result && result[0] && result[0].affectedRows === 0) {
+      return { error: 'No running timer found' };
+    }
+
+    revalidatePath('/[locale]/timaskraningar');
+    revalidatePath('/[locale]/dashboard');
+    return { success: true };
+  } catch (error) {
+    console.error('Failed to stop timer:', error);
+    return { error: 'Failed to stop timer' };
+  }
+}
+
+export async function resumeTimeEntry(id: number) {
+  const { userId } = await auth();
+  if (!userId) {
+    return { error: 'Unauthorized' };
+  }
+
+  const membership = await getUserOrganization(userId);
+  if (!membership) {
+    return { error: 'No organization found' };
+  }
+
+  try {
+    const entry = await db.query.timeEntries.findFirst({
+      where: eq(timeEntries.id, id),
+      with: {
+        project: true
+      }
+    });
+
+    if (!entry) return { error: 'Entry not found' };
+
+    if (entry.project.organizationId !== membership.organizationId) {
+      return { error: 'Unauthorized' };
+    }
+
+    if (!entry.endTime) {
+      return { error: 'Timer is already running' };
+    }
+
+    // Calculate gap duration
+    const now = new Date();
+    const pauseDuration = now.getTime() - entry.endTime.getTime();
+    
+    // Shift start time forward by the pause duration
+    const newStartTime = new Date(entry.startTime.getTime() + pauseDuration);
+
+    await db.update(timeEntries)
+      .set({
+        startTime: newStartTime,
+        endTime: null,
+        duration: null
+      })
+      .where(eq(timeEntries.id, id));
+
+    revalidatePath('/[locale]/timaskraningar');
+    revalidatePath('/[locale]/dashboard');
+    
+    return { success: true, id: id };
+  } catch (error) {
+    console.error('Failed to resume time entry:', error);
+    return { error: 'Failed to resume time entry' };
   }
 }
 

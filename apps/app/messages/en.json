@@ -85,7 +85,21 @@
       "delete": "Delete",
       "edit": "Edit",
       "addEntry": "Add Time Entry",
-      "logTime": "Log Time"
+      "logTime": "Log Time",
+      "createProjectRequired": "Please create a project first"
+    },
+    "timer": {
+      "start": "Start Timer",
+      "stop": "Stop Timer",
+      "pause": "Pause Timer",
+      "resume": "Resume Timer",
+      "running": "Running Timer",
+      "paused": "Timer Paused",
+      "noProject": "No Project",
+      "started": "Timer started",
+      "stopped": "Timer stopped",
+      "pausedToast": "Timer paused",
+      "resumedToast": "Timer resumed"
     },
     "stats": {
       "billable": "Total Billable Hours",
@@ -173,7 +187,12 @@
       "editDescription": "Update time entry details.",
       "update": "Update Entry",
       "updating": "Updating...",
-      "updateSuccess": "Entry updated"
+      "updateSuccess": "Entry updated",
+      "startTimerTitle": "Start Timer",
+      "stopTimerTitle": "Stop Timer",
+      "startTimerDescription": "Select a project and start the timer.",
+      "stopTimerDescription": "Review details and stop the timer.",
+      "starting": "Starting..."
     },
     "expenses": {
       "new": "New Expense",

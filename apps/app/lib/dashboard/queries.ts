@@ -619,3 +619,13 @@ export async function searchExpenses(organizationId: number, query: string) {
 
   return rows;
 }
+
+export async function getRunningTimeEntry(userId: string) {
+  const entry = await db.query.timeEntries.findFirst({
+    where: and(eq(timeEntries.userId, userId), sql`${timeEntries.endTime} IS NULL`),
+    with: {
+      project: true,
+    },
+  });
+  return entry;
+}

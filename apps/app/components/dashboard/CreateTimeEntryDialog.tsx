@@ -46,6 +46,16 @@ type CreateTimeEntryDialogProps = {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
   initialData?: TimeEntryData;
+  onStart?: (
+    projectId: number,
+    description?: string,
+    startTime?: Date
+  ) => Promise<void>;
+  onStop?: (data?: {
+    description?: string;
+    projectId?: number;
+    endTime?: Date;
+  }) => void;
 };
 
 export function CreateTimeEntryDialog({
@@ -53,6 +63,8 @@ export function CreateTimeEntryDialog({
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
   initialData,
+  onStart,
+  onStop,
 }: CreateTimeEntryDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const t = useTranslations('Dashboard.entries');
@@ -68,9 +80,15 @@ export function CreateTimeEntryDialog({
   // Reset form when opening/closing or initialData changes
   useEffect(() => {
     if (open) {
-      setSelectedProject(initialData?.projectId.toString() ?? '');
+      if (initialData?.projectId) {
+        setSelectedProject(initialData.projectId.toString());
+      } else if (projects.length > 0) {
+        setSelectedProject(projects[0].id.toString());
+      } else {
+        setSelectedProject('');
+      }
     }
-  }, [open, initialData]);
+  }, [open, initialData, projects]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -83,14 +101,17 @@ export function CreateTimeEntryDialog({
     const endTimeInput = formData.get('endTime') as string;
     const description = formData.get('description') as string;
 
-    if (!date || !startTimeInput) {
+    if (!isStartingTimer && (!date || !startTimeInput)) {
       toast.error(t('dateRequired'));
       setIsLoading(false);
       return;
     }
 
-    const startDateTimeString = `${date}T${startTimeInput}`;
-    const endDateTimeString = endTimeInput ? `${date}T${endTimeInput}` : undefined;
+    const startDateTimeString =
+      date && startTimeInput ? `${date}T${startTimeInput}` : undefined;
+    const endDateTimeString = endTimeInput
+      ? `${date}T${endTimeInput}`
+      : undefined;
 
     const data = {
       projectId: Number(selectedProject),
@@ -105,14 +126,55 @@ export function CreateTimeEntryDialog({
       return;
     }
 
+    // If onStart is provided, we are starting a timer
+    if (onStart) {
+      await onStart(
+        data.projectId,
+        data.description,
+        data.startTime ? new Date(data.startTime) : undefined
+      );
+      setOpen(false);
+      setIsLoading(false);
+      return;
+    }
+
     const payload = {
       ...data,
-      startTime: new Date(data.startTime),
+      startTime: new Date(data.startTime!),
       endTime: data.endTime ? new Date(data.endTime) : undefined,
     };
 
+    // If onStop is provided, we are stopping the timer
+    if (onStop) {
+      // Pass the data to stopTimer via onStop
+      await onStop({
+        description: payload.description,
+        projectId: payload.projectId,
+        endTime: payload.endTime || new Date(),
+      });
+      setOpen(false);
+      setIsLoading(false);
+      return;
+    }
+
     let result;
     if (initialData?.id) {
+      // If we are editing (or stopping) a running entry, we expect endTime to be set (or defaulted to now if empty?)
+      // Actually, the form input for endTime might be empty if the user didn't fill it.
+      // If stopping, we usually want to set it to now if not specified.
+      // BUT here we just take what the form gave us.
+      // If onStop is provided, it means we want to stop the timer.
+
+      // If onStop is passed and endTime is missing, should we default it to NOW?
+      // The user might want to "save changes" without stopping if they didn't click "Stop Timer".
+      // But the main action when running is usually "Stop".
+      // Let's assume standard update behavior: if endTime is provided, it stops.
+
+      // If onStop is provided, we enforce stopping?
+      // No, let's let the user decide via the endTime field.
+      // However, if the user clicks "Stop Timer" (the main button), they expect it to stop.
+
+      // For now, standard update.
       result = await updateTimeEntry(initialData.id, payload);
     } else {
       result = await createTimeEntry(payload);
@@ -128,6 +190,8 @@ export function CreateTimeEntryDialog({
   }
 
   const isEditing = !!initialData;
+  const isStartingTimer = !!onStart;
+  const isStoppingTimer = !!onStop;
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -142,9 +206,23 @@ export function CreateTimeEntryDialog({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{isEditing ? t('edit') : t('newEntry')}</DialogTitle>
+            <DialogTitle>
+              {isStartingTimer
+                ? t('startTimerTitle')
+                : isStoppingTimer
+                ? t('stopTimerTitle')
+                : isEditing
+                ? t('edit')
+                : t('newEntry')}
+            </DialogTitle>
             <DialogDescription>
-              {isEditing ? t('editDescription') : t('newEntryDescription')}
+              {isStartingTimer
+                ? t('startTimerDescription')
+                : isStoppingTimer
+                ? t('stopTimerDescription')
+                : isEditing
+                ? t('editDescription')
+                : t('newEntryDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -181,60 +259,70 @@ export function CreateTimeEntryDialog({
                 defaultValue={initialData?.description}
               />
             </div>
-            <div className="grid gap-2">
-              <Label htmlFor="date">{t('date')}</Label>
-              <Input
-                id="date"
-                name="date"
-                type="date"
-                required
-                defaultValue={
-                  initialData?.startTime
-                    ? initialData.startTime.toISOString().slice(0, 10)
-                    : new Date().toISOString().slice(0, 10)
-                }
-              />
-            </div>
-            <div className="grid grid-cols-2 gap-4">
-              <div className="grid gap-2">
-                <Label htmlFor="startTime">{t('startTime')}</Label>
-                <Input
-                  id="startTime"
-                  name="startTime"
-                  type="time"
-                  required
-                  defaultValue={
-                    initialData?.startTime
-                      ? initialData.startTime.toTimeString().slice(0, 5)
-                      : new Date().toTimeString().slice(0, 5)
-                  }
-                />
-              </div>
-              <div className="grid gap-2">
-                <Label htmlFor="endTime">{t('endTime')}</Label>
-                <Input
-                  id="endTime"
-                  name="endTime"
-                  type="time"
-                  defaultValue={
-                    initialData?.endTime
-                      ? initialData.endTime.toTimeString().slice(0, 5)
-                      : ''
-                  }
-                />
-              </div>
-            </div>
+            {!isStartingTimer && (
+              <>
+                <div className="grid gap-2">
+                  <Label htmlFor="date">{t('date')}</Label>
+                  <Input
+                    id="date"
+                    name="date"
+                    type="date"
+                    required
+                    defaultValue={
+                      initialData?.startTime
+                        ? initialData.startTime.toISOString().slice(0, 10)
+                        : new Date().toISOString().slice(0, 10)
+                    }
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div className="grid gap-2">
+                    <Label htmlFor="startTime">{t('startTime')}</Label>
+                    <Input
+                      id="startTime"
+                      name="startTime"
+                      type="time"
+                      required
+                      defaultValue={
+                        initialData?.startTime
+                          ? initialData.startTime.toTimeString().slice(0, 5)
+                          : new Date().toTimeString().slice(0, 5)
+                      }
+                    />
+                  </div>
+                  <div className="grid gap-2">
+                    <Label htmlFor="endTime">{t('endTime')}</Label>
+                    <Input
+                      id="endTime"
+                      name="endTime"
+                      type="time"
+                      defaultValue={
+                        initialData?.endTime
+                          ? initialData.endTime.toTimeString().slice(0, 5)
+                          : ''
+                      }
+                    />
+                  </div>
+                </div>
+              </>
+            )}
           </div>
           <DialogFooter>
-            <Button 
-              type="submit" 
+            <Button
+              type="submit"
               disabled={isLoading}
               className="flex items-center justify-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90"
             >
               {isLoading
                 ? isEditing
                   ? t('updating')
+                  : isStartingTimer
+                  ? t('starting')
                   : t('creating')
+                : isStartingTimer
+                ? t('startTimerTitle')
+                : isStoppingTimer
+                ? t('stopTimerTitle')
                 : isEditing
                 ? t('update')
                 : t('create')}

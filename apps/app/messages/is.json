@@ -85,7 +85,21 @@
       "delete": "Eyða",
       "edit": "Breyta",
       "addEntry": "Skrá tíma",
-      "logTime": "Skrá færslu"
+      "logTime": "Skrá færslu",
+      "createProjectRequired": "Vinsamlegast stofnaðu verkefni fyrst"
+    },
+    "timer": {
+      "start": "Ræsa tímamæli",
+      "stop": "Stöðva tímamæli",
+      "pause": "Gera hlé",
+      "resume": "Halda áfram",
+      "running": "Tímamælir í gangi",
+      "paused": "Tímamælir í bið",
+      "noProject": "Ekkert verkefni",
+      "started": "Tímamælir ræstur",
+      "stopped": "Tímamælir stöðvaður",
+      "pausedToast": "Hlé gert á tímamæli",
+      "resumedToast": "Tímamælir ræstur á ný"
     },
     "stats": {
       "billable": "Heildargjaldtímar",
@@ -132,6 +146,13 @@
         "thisWeek": "Þessi vika",
         "thisMonth": "Þessi mánuður",
         "thisYear": "Þetta ár"
+      },
+      "searchResults": {
+        "noResults": "Engar niðurstöður fundust.",
+        "features": "Eiginleikar",
+        "entries": "Tímaskráningar",
+        "projects": "Verkefni",
+        "expenses": "Útgjöld"
       }
     },
     "cta": {
@@ -173,7 +194,12 @@
       "editDescription": "Uppfærðu upplýsingar um tímaskráningu.",
       "update": "Uppfæra tímaskráningu",
       "updating": "Uppfæri...",
-      "updateSuccess": "Tímaskráning uppfærð"
+      "updateSuccess": "Tímaskráning uppfærð",
+      "startTimerTitle": "Ræsa tímamæli",
+      "stopTimerTitle": "Stöðva tímamæli",
+      "startTimerDescription": "Veldu verkefni og ræstu tímamælinn.",
+      "stopTimerDescription": "Yfirfarðu upplýsingar og stöðvaðu tímamælinn.",
+      "starting": "Ræsi..."
     },
     "expenses": {
       "new": "Ný útgjöld",

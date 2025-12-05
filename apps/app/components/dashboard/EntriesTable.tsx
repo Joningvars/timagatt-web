@@ -54,6 +54,9 @@ export function EntriesTable({
     new Set()
   );
   const [selectedUsers, setSelectedUsers] = useState<Set<string>>(new Set());
+  const [selectedStatuses, setSelectedStatuses] = useState<Set<string>>(
+    new Set()
+  );
   const [dateFilter, setDateFilter] = useState<DateFilter>('all');
 
   const uniqueProjects = useMemo(() => {
@@ -62,6 +65,10 @@ export function EntriesTable({
 
   const uniqueUsers = useMemo(() => {
     return Array.from(new Set(entries.map((e) => e.user.name))).sort();
+  }, [entries]);
+
+  const uniqueStatuses = useMemo(() => {
+    return Array.from(new Set(entries.map((e) => e.status.labelKey))).sort();
   }, [entries]);
 
   const filteredEntries = useMemo(() => {
@@ -97,15 +104,31 @@ export function EntriesTable({
         selectedProjects.size === 0 || selectedProjects.has(entry.project);
       const matchesUser =
         selectedUsers.size === 0 || selectedUsers.has(entry.user.name);
+      const matchesStatus =
+        selectedStatuses.size === 0 ||
+        selectedStatuses.has(entry.status.labelKey);
 
       let matchesDate = true;
       if (dateRange && entry.rawDate) {
         matchesDate = isWithinInterval(parseISO(entry.rawDate), dateRange);
       }
 
-      return matchesSearch && matchesProject && matchesUser && matchesDate;
+      return (
+        matchesSearch &&
+        matchesProject &&
+        matchesUser &&
+        matchesStatus &&
+        matchesDate
+      );
     });
-  }, [entries, searchQuery, selectedProjects, selectedUsers, dateFilter]);
+  }, [
+    entries,
+    searchQuery,
+    selectedProjects,
+    selectedUsers,
+    selectedStatuses,
+    dateFilter,
+  ]);
 
   const toggleFilter = (
     set: Set<string>,
@@ -124,6 +147,7 @@ export function EntriesTable({
   const clearFilters = () => {
     setSelectedProjects(new Set());
     setSelectedUsers(new Set());
+    setSelectedStatuses(new Set());
     setDateFilter('all');
     setSearchQuery('');
   };
@@ -131,6 +155,7 @@ export function EntriesTable({
   const hasActiveFilters =
     selectedProjects.size > 0 ||
     selectedUsers.size > 0 ||
+    selectedStatuses.size > 0 ||
     dateFilter !== 'all' ||
     searchQuery !== '';
 
@@ -158,10 +183,12 @@ export function EntriesTable({
                 {t('table.filter.button')}
                 {(selectedProjects.size > 0 ||
                   selectedUsers.size > 0 ||
+                  selectedStatuses.size > 0 ||
                   dateFilter !== 'all') && (
                   <span className="flex h-4 w-4 items-center justify-center rounded-full bg-purple-100 text-[10px] font-bold text-purple-600 dark:bg-purple-900/30 dark:text-purple-300">
                     {selectedProjects.size +
                       selectedUsers.size +
+                      selectedStatuses.size +
                       (dateFilter !== 'all' ? 1 : 0)}
                   </span>
                 )}
@@ -170,6 +197,30 @@ export function EntriesTable({
             <DropdownMenuContent align="end" className="w-56">
               <DropdownMenuLabel>{t('table.filter.button')}</DropdownMenuLabel>
               <DropdownMenuSeparator />
+
+              <DropdownMenuSub>
+                <DropdownMenuSubTrigger className="cursor-pointer">
+                  {t('table.filter.byStatus')}
+                </DropdownMenuSubTrigger>
+                <DropdownMenuSubContent className="max-h-[200px] overflow-y-auto">
+                  {uniqueStatuses.map((statusKey) => (
+                    <DropdownMenuCheckboxItem
+                      key={statusKey}
+                      checked={selectedStatuses.has(statusKey)}
+                      onCheckedChange={() =>
+                        toggleFilter(
+                          selectedStatuses,
+                          setSelectedStatuses,
+                          statusKey
+                        )
+                      }
+                      className="cursor-pointer"
+                    >
+                      {t(statusKey)}
+                    </DropdownMenuCheckboxItem>
+                  ))}
+                </DropdownMenuSubContent>
+              </DropdownMenuSub>
 
               <DropdownMenuSub>
                 <DropdownMenuSubTrigger className="cursor-pointer">

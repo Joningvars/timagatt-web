@@ -1,6 +1,7 @@
 'use client';
 
 import { useTranslations } from 'next-intl';
+import { Link } from '@/src/i18n/routing';
 import type { ActivityItem } from '@/lib/dashboard/data';
 
 type ActivityTimelineProps = {
@@ -34,9 +35,12 @@ export function ActivityTimeline({ activities }: ActivityTimelineProps) {
           </div>
         ))}
       </div>
-      <button className="mt-4 w-full rounded-lg border border-input py-2 text-xs font-bold text-muted-foreground transition hover:bg-accent hover:text-accent-foreground">
+      <Link
+        href="/timaskraningar"
+        className="mt-4 block w-full rounded-lg border border-input py-2 text-center text-xs font-bold text-muted-foreground transition hover:bg-accent hover:text-accent-foreground"
+      >
         {t('activity.viewAll')}
-      </button>
+      </Link>
     </div>
   );
 }

@@ -471,21 +471,33 @@ export async function getDashboardData(organizationId: number) {
   const activityColors = ["border-purple-500", "border-blue-400", "border-emerald-400", "border-slate-200"];
 
   const activities: ActivityItem[] = [
-    ...entries.slice(0, 3).map((entry, index) => ({
+    ...entries.map((entry) => ({
       id: `entry-${entry.id}`,
       title: `Time Logged: ${hoursFormatter.format(secondsToHours(durationSeconds(entry)))}klst`,
       description: `${entry.projectName ?? "Project"} — ${entry.description ?? "Details added"}`,
       time: formatDistanceToNow(entry.startTime, { addSuffix: true, locale: is }),
-      color: activityColors[index % activityColors.length],
+      rawDate: entry.startTime,
+      color: "", // Set later
     })),
-    ...expenseRows.slice(0, 2).map((expense, index) => ({
+    ...expenseRows.map((expense) => ({
       id: `expense-${expense.id}`,
       title: "Expense Recorded",
       description: `${expense.projectName ?? "Project"} — ${expense.description} (${currencyFormatter.format(Number(expense.amount ?? 0))})`,
       time: expense.date ? formatDistanceToNow(expense.date, { addSuffix: true, locale: is }) : "",
-      color: activityColors[(index + 2) % activityColors.length],
+      rawDate: expense.date,
+      color: "", // Set later
     })),
-  ];
+  ]
+    .sort((a, b) => {
+      const dateA = a.rawDate ? new Date(a.rawDate).getTime() : 0;
+      const dateB = b.rawDate ? new Date(b.rawDate).getTime() : 0;
+      return dateB - dateA;
+    })
+    .slice(0, 5)
+    .map((item, index) => ({
+      ...item,
+      color: activityColors[index % activityColors.length],
+    }));
 
   return {
     stats,

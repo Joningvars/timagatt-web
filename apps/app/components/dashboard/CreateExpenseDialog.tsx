@@ -91,9 +91,9 @@ export function CreateExpenseDialog({
     <Dialog open={open} onOpenChange={setOpen}>
       {!isControlled && (
         <DialogTrigger asChild>
-          <Button size="sm" className="h-9 gap-2 cursor-pointer">
-            <Plus className="h-4 w-4" />
-            {t('new')}
+          <Button className="flex items-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90">
+            <Plus className="h-3.5 w-3.5" />
+            {t('create')}
           </Button>
         </DialogTrigger>
       )}

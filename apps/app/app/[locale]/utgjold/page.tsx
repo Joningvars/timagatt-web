@@ -67,6 +67,7 @@ export default async function ExpensesPage({
     date: expense.date ? format(expense.date, 'dd MMM', { locale: is }) : '—',
     project: expense.projectName ?? '—',
     user: expense.userName ?? '—',
+    userAvatar: expense.userAvatar ?? 'https://i.pravatar.cc/100?img=33',
   }));
 
   return (
@@ -74,10 +75,13 @@ export default async function ExpensesPage({
       <PageHeader
         title="Útgjöld"
         subtitle="Eftirlit með kostnaði"
-        actions={<CreateExpenseDialog projects={projects} />}
       />
             {formattedExpenses.length ? (
-              <ExpensesTable rows={formattedExpenses} title="Nýjustu útgjöld" />
+              <ExpensesTable 
+                rows={formattedExpenses} 
+                title="Nýjustu útgjöld"
+                actions={<CreateExpenseDialog projects={projects} />} 
+              />
             ) : (
               <EmptyState
                 title="Engin útgjöld skráð"

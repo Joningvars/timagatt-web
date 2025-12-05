@@ -67,7 +67,7 @@ export default async function TimesheetsPage({
           actions={
             <DashboardActions
               exportLabel={t('actions.export')}
-              startLabel="Add Time Entry"
+              startLabel={t('actions.addEntry')}
               projects={projects}
             />
           }

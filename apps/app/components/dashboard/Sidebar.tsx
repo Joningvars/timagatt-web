@@ -31,11 +31,19 @@ export function Sidebar({
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex dark:shadow-none">
       <div className="flex h-16 shrink-0 items-center border-b border-sidebar-border px-6">
         <div className="flex items-center gap-2.5">
-          <div className="grid grid-cols-2 gap-1">
-            <div className="h-2.5 w-2.5 rounded-full bg-purple-600" />
-            <div className="h-2.5 w-2.5 rounded-full bg-purple-400/60" />
-            <div className="h-2.5 w-2.5 rounded-full bg-purple-400/60" />
-            <div className="h-2.5 w-2.5 rounded-full bg-purple-300/40" />
+          <div className="relative h-8 w-8">
+            <Image
+              src="/logos/logo.png"
+              alt="Timagatt Logo"
+              fill
+              className="object-contain dark:hidden"
+            />
+            <Image
+              src="/logos/logo-darkmode.png"
+              alt="Timagatt Logo"
+              fill
+              className="object-contain hidden dark:block"
+            />
           </div>
           <span className="text-lg font-bold tracking-tight text-sidebar-foreground">
             Timagatt

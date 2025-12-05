@@ -30,13 +30,13 @@ export function LanguageSelector() {
       <DropdownMenuContent align="end">
         <DropdownMenuItem
           onClick={() => handleLocaleChange('en')}
-          className={`cursor-pointer ${locale === 'en' ? 'bg-slate-100' : ''}`}
+          className={`cursor-pointer ${locale === 'en' ? 'bg-accent text-accent-foreground' : ''}`}
         >
           🇺🇸 English
         </DropdownMenuItem>
         <DropdownMenuItem
           onClick={() => handleLocaleChange('is')}
-          className={`cursor-pointer ${locale === 'is' ? 'bg-slate-100' : ''}`}
+          className={`cursor-pointer ${locale === 'is' ? 'bg-accent text-accent-foreground' : ''}`}
         >
           🇮🇸 Íslenska
         </DropdownMenuItem>

@@ -56,10 +56,13 @@ export default async function ProjectsPage({
       <PageHeader
         title="Verkefni"
         subtitle="Yfirlit yfir öll verkefni"
-        actions={<CreateProjectDialog />}
       />
             {projects.length ? (
-              <ProjectsGrid rows={projects} title="Verkefnasafn" />
+              <ProjectsGrid 
+                rows={projects} 
+                title="Verkefnasafn" 
+                actions={<CreateProjectDialog />}
+              />
             ) : (
               <EmptyState
                 title="Engin verkefni til"

@@ -228,6 +228,7 @@ export async function getExpensesForOrganization(organizationId: number) {
       date: expenses.date,
       projectName: projects.name,
       userName: users.name,
+      userAvatar: users.imageUrl,
     })
     .from(expenses)
     .innerJoin(projects, eq(projects.id, expenses.projectId))

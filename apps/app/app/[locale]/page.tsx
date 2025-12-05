@@ -104,7 +104,10 @@ export default async function DashboardPage({
                 <ActivityTimeline activities={dashboardData.activities} />
               </section>
 
-              <EntriesTable entries={dashboardData.entries} />
+              <EntriesTable
+                entries={dashboardData.entries}
+                projects={dashboardData.projects}
+              />
             </div>
           </>
         ) : null}

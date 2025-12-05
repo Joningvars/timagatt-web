@@ -17,12 +17,16 @@ import {
   DropdownMenuSeparator,
   DropdownMenuItem,
 } from '@/components/ui/dropdown-menu';
+import { ExpenseActions } from '@/components/dashboard/ExpenseActions';
+import type { Project } from '@/lib/dashboard/data';
 
-type ExpenseRow = {
+export type ExpenseRow = {
   id: number;
+  projectId: number;
   description: string;
   amount: string;
   date: string;
+  rawDate: Date; // Needed for edit
   project: string;
   user: string;
   userAvatar: string;
@@ -30,11 +34,12 @@ type ExpenseRow = {
 
 type ExpensesTableProps = {
   rows: ExpenseRow[];
+  projects: Project[];
   title: string;
   actions?: ReactNode;
 };
 
-export function ExpensesTable({ rows, title, actions }: ExpensesTableProps) {
+export function ExpensesTable({ rows, projects, title, actions }: ExpensesTableProps) {
   const t = useTranslations('Dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedProjects, setSelectedProjects] = useState<Set<string>>(new Set());
@@ -189,6 +194,7 @@ export function ExpensesTable({ rows, title, actions }: ExpensesTableProps) {
               <th className="px-6 py-3">Notandi</th>
               <th className="px-6 py-3 text-right">Dagsetning</th>
               <th className="px-6 py-3 text-right">Upphæð</th>
+              <th className="px-6 py-3" />
             </tr>
           </thead>
           <tbody className="divide-y divide-border text-xs">
@@ -231,12 +237,25 @@ export function ExpensesTable({ rows, title, actions }: ExpensesTableProps) {
                   <td className="px-6 py-4 text-right font-semibold text-foreground">
                     {expense.amount}
                   </td>
+                  <td className="px-6 py-4 text-right">
+                    <ExpenseActions
+                      expenseId={expense.id}
+                      projects={projects}
+                      initialData={{
+                        id: expense.id,
+                        projectId: expense.projectId,
+                        description: expense.description,
+                        amount: parseFloat(expense.amount.replace(/[^0-9.-]+/g, '')), // Parse currency string back to number approx
+                        date: expense.rawDate,
+                      }}
+                    />
+                  </td>
                 </tr>
               ))
             ) : (
               <tr>
                 <td
-                  colSpan={5}
+                  colSpan={6}
                   className="px-6 py-8 text-center text-xs text-muted-foreground"
                 >
                   No expenses found matching filters.

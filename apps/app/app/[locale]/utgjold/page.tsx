@@ -62,9 +62,11 @@ export default async function ExpensesPage({
 
   const formattedExpenses = expenseRows.map((expense) => ({
     id: expense.id,
+    projectId: expense.projectId,
     description: expense.description,
     amount: currencyFormatter.format(Number(expense.amount ?? 0)),
     date: expense.date ? format(expense.date, 'dd MMM', { locale: is }) : '—',
+    rawDate: expense.date,
     project: expense.projectName ?? '—',
     user: expense.userName ?? '—',
     userAvatar: expense.userAvatar ?? 'https://i.pravatar.cc/100?img=33',
@@ -79,6 +81,7 @@ export default async function ExpensesPage({
             {formattedExpenses.length ? (
               <ExpensesTable 
                 rows={formattedExpenses} 
+                projects={projects}
                 title="Nýjustu útgjöld"
                 actions={<CreateExpenseDialog projects={projects} />} 
               />

@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Button } from '@/components/ui/button';
 import {
@@ -24,7 +24,7 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createTimeEntry } from '@/lib/actions';
+import { createTimeEntry, updateTimeEntry } from '@/lib/actions';
 import { toast } from 'sonner';
 import { Plus } from 'lucide-react';
 
@@ -33,25 +33,44 @@ type Project = {
   name: string;
 };
 
+export type TimeEntryData = {
+  id?: number;
+  projectId: number;
+  description?: string;
+  startTime: Date;
+  endTime?: Date;
+};
+
 type CreateTimeEntryDialogProps = {
   projects: Project[];
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  initialData?: TimeEntryData;
 };
 
 export function CreateTimeEntryDialog({
-  projects,
+  projects = [],
   open: controlledOpen,
   onOpenChange: controlledOnOpenChange,
+  initialData,
 }: CreateTimeEntryDialogProps) {
   const [internalOpen, setInternalOpen] = useState(false);
   const t = useTranslations('Dashboard.entries');
   const [isLoading, setIsLoading] = useState(false);
-  const [selectedProject, setSelectedProject] = useState<string>('');
+  const [selectedProject, setSelectedProject] = useState<string>(
+    initialData?.projectId.toString() ?? ''
+  );
 
   const isControlled = controlledOpen !== undefined;
   const open = isControlled ? controlledOpen : internalOpen;
   const setOpen = isControlled ? controlledOnOpenChange! : setInternalOpen;
+
+  // Reset form when opening/closing or initialData changes
+  useEffect(() => {
+    if (open) {
+      setSelectedProject(initialData?.projectId.toString() ?? '');
+    }
+  }, [open, initialData]);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -92,20 +111,27 @@ export function CreateTimeEntryDialog({
       endTime: data.endTime ? new Date(data.endTime) : undefined,
     };
 
-    const result = await createTimeEntry(payload);
+    let result;
+    if (initialData?.id) {
+      result = await updateTimeEntry(initialData.id, payload);
+    } else {
+      result = await createTimeEntry(payload);
+    }
 
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success(t('createSuccess'));
+      toast.success(initialData ? 'Entry updated' : t('createSuccess'));
       setOpen(false);
     }
     setIsLoading(false);
   }
 
+  const isEditing = !!initialData;
+
   return (
     <Dialog open={open} onOpenChange={setOpen}>
-      {!isControlled && (
+      {!isControlled && !isEditing && (
         <DialogTrigger asChild>
           <Button size="sm" className="h-9 gap-2">
             <Plus className="h-4 w-4" />
@@ -116,8 +142,10 @@ export function CreateTimeEntryDialog({
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{t('newEntry')}</DialogTitle>
-            <DialogDescription>{t('newEntryDescription')}</DialogDescription>
+            <DialogTitle>{isEditing ? 'Edit Entry' : t('newEntry')}</DialogTitle>
+            <DialogDescription>
+              {isEditing ? 'Update time entry details.' : t('newEntryDescription')}
+            </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid gap-2">
@@ -150,6 +178,7 @@ export function CreateTimeEntryDialog({
                 id="description"
                 name="description"
                 placeholder={t('descriptionPlaceholder')}
+                defaultValue={initialData?.description}
               />
             </div>
             <div className="grid gap-2">
@@ -159,7 +188,11 @@ export function CreateTimeEntryDialog({
                 name="date"
                 type="date"
                 required
-                defaultValue={new Date().toISOString().slice(0, 10)}
+                defaultValue={
+                  initialData?.startTime
+                    ? initialData.startTime.toISOString().slice(0, 10)
+                    : new Date().toISOString().slice(0, 10)
+                }
               />
             </div>
             <div className="grid grid-cols-2 gap-4">
@@ -170,18 +203,37 @@ export function CreateTimeEntryDialog({
                   name="startTime"
                   type="time"
                   required
-                  defaultValue={new Date().toTimeString().slice(0, 5)}
+                  defaultValue={
+                    initialData?.startTime
+                      ? initialData.startTime.toTimeString().slice(0, 5)
+                      : new Date().toTimeString().slice(0, 5)
+                  }
                 />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="endTime">{t('endTime')}</Label>
-                <Input id="endTime" name="endTime" type="time" />
+                <Input
+                  id="endTime"
+                  name="endTime"
+                  type="time"
+                  defaultValue={
+                    initialData?.endTime
+                      ? initialData.endTime.toTimeString().slice(0, 5)
+                      : ''
+                  }
+                />
               </div>
             </div>
           </div>
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
-              {isLoading ? t('creating') : t('create')}
+              {isLoading
+                ? isEditing
+                  ? 'Updating...'
+                  : t('creating')
+                : isEditing
+                ? 'Update Entry'
+                : t('create')}
             </Button>
           </DialogFooter>
         </form>

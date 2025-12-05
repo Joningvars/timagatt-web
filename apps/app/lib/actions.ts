@@ -39,6 +39,10 @@ const createExpenseSchema = z.object({
   date: z.string().transform((str) => new Date(str)),
 });
 
+const updateExpenseSchema = createExpenseSchema.partial().extend({
+  id: z.number(),
+});
+
 // --- Actions ---
 
 // JOB (PROJECT) ACTIONS
@@ -153,10 +157,6 @@ export async function createTimeEntry(data: z.infer<typeof createTimeEntrySchema
     return { error: 'Unauthorized' };
   }
 
-  // Ensure user belongs to the organization that owns the project
-  // This requires a join check or ensuring the project ID is valid for the user's org
-  // For simplicity here, we'll assume the projectId is valid if we can find it and checks org match
-  
   // Validate project ownership
   const project = await db.query.projects.findFirst({
     where: eq(projects.id, data.projectId),
@@ -209,9 +209,23 @@ export async function updateTimeEntry(id: number, data: Partial<z.infer<typeof c
       return { error: 'Unauthorized' };
     }
 
+    let duration = data.duration;
+    if (data.startTime && data.endTime) {
+        duration = Math.floor((data.endTime.getTime() - data.startTime.getTime()) / 1000);
+    }
+
+    if (duration && duration < 0) {
+        return { error: "End time cannot be before start time" };
+    }
+    
+    const updateData = {
+        ...data,
+        duration: duration !== undefined ? duration : undefined
+    }
+
     try {
         await db.update(timeEntries)
-            .set(data)
+            .set(updateData)
             .where(and(eq(timeEntries.id, id), eq(timeEntries.userId, userId)));
 
         revalidatePath('/[locale]/timaskraningar');
@@ -283,6 +297,48 @@ export async function createExpense(data: z.infer<typeof createExpenseSchema>) {
     console.error('Failed to create expense:', error);
     return { error: 'Failed to create expense' };
   }
+}
+
+export async function updateExpense(id: number, data: Partial<z.infer<typeof createExpenseSchema>>) {
+    const { userId } = await auth();
+    if (!userId) {
+      return { error: 'Unauthorized' };
+    }
+
+    try {
+        await db.update(expenses)
+            .set({
+                ...data,
+                amount: data.amount !== undefined ? String(data.amount) : undefined
+            })
+            .where(and(eq(expenses.id, id), eq(expenses.userId, userId)));
+
+        revalidatePath('/[locale]/utgjold');
+        revalidatePath('/[locale]/dashboard');
+        return { success: true };
+    } catch (error) {
+        console.error('Failed to update expense:', error);
+        return { error: 'Failed to update expense' };
+    }
+}
+
+export async function deleteExpense(id: number) {
+    const { userId } = await auth();
+    if (!userId) {
+      return { error: 'Unauthorized' };
+    }
+
+    try {
+        await db.delete(expenses)
+            .where(and(eq(expenses.id, id), eq(expenses.userId, userId)));
+
+        revalidatePath('/[locale]/utgjold');
+        revalidatePath('/[locale]/dashboard');
+        return { success: true };
+    } catch (error) {
+        console.error('Failed to delete expense:', error);
+        return { error: 'Failed to delete expense' };
+    }
 }
 
 // SEARCH ACTION

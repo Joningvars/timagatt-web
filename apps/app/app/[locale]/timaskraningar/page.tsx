@@ -62,6 +62,7 @@ export default async function TimesheetsPage({
       {entries.length ? (
         <EntriesTable
           entries={entries}
+          projects={projects}
           title="Allar tímaskráningar"
           filterPlaceholder="Leita í færslum..."
           actions={

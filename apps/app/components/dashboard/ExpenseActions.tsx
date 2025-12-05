@@ -11,26 +11,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { deleteTimeEntry } from '@/lib/actions';
-import { CreateTimeEntryDialog, TimeEntryData } from '@/components/dashboard/CreateTimeEntryDialog';
+import { deleteExpense } from '@/lib/actions';
+import { CreateExpenseDialog, ExpenseData } from '@/components/dashboard/CreateExpenseDialog';
 import type { Project } from '@/lib/dashboard/data';
 
-type EntryActionsProps = {
-  entryId: number;
+type ExpenseActionsProps = {
+  expenseId: number;
   projects: Project[];
-  initialData: TimeEntryData;
+  initialData: ExpenseData;
 };
 
-export function EntryActions({ entryId, projects, initialData }: EntryActionsProps) {
+export function ExpenseActions({ expenseId, projects, initialData }: ExpenseActionsProps) {
   const t = useTranslations('Dashboard.actions');
   const [isEditOpen, setIsEditOpen] = useState(false);
   
   async function handleDelete() {
-    const result = await deleteTimeEntry(entryId);
+    const result = await deleteExpense(expenseId);
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success('Entry deleted');
+      toast.success('Expense deleted');
     }
   }
 
@@ -60,7 +60,7 @@ export function EntryActions({ entryId, projects, initialData }: EntryActionsPro
         </DropdownMenuContent>
       </DropdownMenu>
 
-      <CreateTimeEntryDialog
+      <CreateExpenseDialog
         projects={projects}
         open={isEditOpen}
         onOpenChange={setIsEditOpen}
@@ -69,3 +69,4 @@ export function EntryActions({ entryId, projects, initialData }: EntryActionsPro
     </>
   );
 }
+

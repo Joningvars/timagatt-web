@@ -176,6 +176,7 @@ export async function getTimeEntriesForOrganization(organizationId: number, limi
       startTime: timeEntries.startTime,
       endTime: timeEntries.endTime,
       duration: timeEntries.duration,
+      projectId: timeEntries.projectId,
       projectName: projects.name,
       userName: users.name,
       userEmail: users.email,
@@ -201,6 +202,7 @@ function buildRecentEntries(rows: TimeEntryRow[], colorOffset = 0): RecentEntry[
 
     return {
       id: entry.id,
+      projectId: entry.projectId ?? undefined,
       client: entry.projectName ?? "—",
       project: entry.projectName ?? "—",
       initials: initialsFrom(entry.projectName ?? "??"),
@@ -212,6 +214,8 @@ function buildRecentEntries(rows: TimeEntryRow[], colorOffset = 0): RecentEntry[
       },
       date: formatDate(entry.startTime),
       rawDate: entry.startTime.toISOString(),
+      startTime: entry.startTime.toISOString(),
+      endTime: entry.endTime?.toISOString(),
       duration: `${hoursFormatter.format(secondsToHours(seconds))}klst`,
       amount: currencyFormatter.format(amountValue),
       status: STATUS_COLORS[statusKey],
@@ -223,6 +227,7 @@ export async function getExpensesForOrganization(organizationId: number) {
   const rows = await db
     .select({
       id: expenses.id,
+      projectId: expenses.projectId,
       description: expenses.description,
       amount: expenses.amount,
       date: expenses.date,

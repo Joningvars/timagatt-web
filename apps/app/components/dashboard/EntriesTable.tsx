@@ -14,7 +14,7 @@ import {
   isWithinInterval,
   parseISO,
 } from 'date-fns';
-import type { RecentEntry } from '@/lib/dashboard/data';
+import type { RecentEntry, Project } from '@/lib/dashboard/data';
 import { Input } from '@/components/ui/input';
 import { EntryActions } from '@/components/dashboard/EntryActions';
 import { ReactNode } from 'react';
@@ -37,6 +37,7 @@ type DateFilter = 'all' | 'week' | 'month' | 'year';
 
 type EntriesTableProps = {
   entries: RecentEntry[];
+  projects: Project[];
   title?: string;
   filterPlaceholder?: string;
   actions?: ReactNode;
@@ -44,6 +45,7 @@ type EntriesTableProps = {
 
 export function EntriesTable({
   entries,
+  projects,
   title,
   filterPlaceholder,
   actions,
@@ -425,7 +427,19 @@ export function EntriesTable({
                     </span>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <EntryActions entryId={entry.id} />
+                    <EntryActions
+                      entryId={entry.id}
+                      projects={projects}
+                      initialData={{
+                        id: entry.id,
+                        projectId: entry.projectId ?? 0, // Assuming 0 or handle missing
+                        description: entry.description,
+                        startTime: new Date(entry.startTime ?? entry.rawDate),
+                        endTime: entry.endTime
+                          ? new Date(entry.endTime)
+                          : undefined,
+                      }}
+                    />
                   </td>
                 </tr>
               ))

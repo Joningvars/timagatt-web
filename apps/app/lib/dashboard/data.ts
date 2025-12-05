@@ -101,6 +101,7 @@ export type Project = {
 
 export type RecentEntry = {
   id: number;
+  projectId?: number;
   client: string;
   project: string;
   initials: string;
@@ -109,6 +110,8 @@ export type RecentEntry = {
   user: { name: string; avatar: string };
   date: string;
   rawDate: string;
+  startTime?: string;
+  endTime?: string;
   duration: string;
   amount: string;
   status: { labelKey: string; color: string; dot: string };

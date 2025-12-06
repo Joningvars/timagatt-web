@@ -3,8 +3,9 @@
 import { Download, Play, Plus, Timer, Square, Pause } from 'lucide-react';
 import { useCallback, useState } from 'react';
 import posthog from 'posthog-js';
-import { useTranslations } from 'next-intl';
+import { useTranslations, useLocale } from 'next-intl';
 import { cn } from '@/lib/utils';
+import { useRouter } from 'next/navigation';
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -35,6 +36,8 @@ export function DashboardActions({
 }: DashboardActionsProps) {
   const t = useTranslations('Dashboard.actions');
   const tTimer = useTranslations('Dashboard.timer');
+  const locale = useLocale();
+  const router = useRouter();
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const {
     isRunning,
@@ -55,7 +58,8 @@ export function DashboardActions({
         format: 'csv',
       });
     }
-  }, []);
+    router.push(`/${locale}/export`);
+  }, [locale, router]);
 
   const handleStartTimer = useCallback(async () => {
     if (hasPosthog) {
@@ -68,7 +72,7 @@ export function DashboardActions({
     }
 
     setIsDialogOpen(true);
-  }, [projects]);
+  }, [projects, t]);
 
   return (
     <>

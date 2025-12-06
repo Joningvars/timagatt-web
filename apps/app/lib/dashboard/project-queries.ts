@@ -102,7 +102,7 @@ export async function getProjectDetails(projectId: number, userId: string) {
     stats: {
       totalHours: hoursFormatter.format(secondsToHours(Number(timeAgg?.totalSeconds ?? 0))),
       totalExpenses: currencyFormatter.format(Number(expenseAgg?.totalAmount ?? 0)),
-      billableAmount: currencyFormatter.format(secondsToHours(Number(timeAgg?.totalSeconds ?? 0)) * 20000), // Default rate
+      billableAmount: currencyFormatter.format(secondsToHours(Number(timeAgg?.totalSeconds ?? 0)) * (project.hourlyRate ?? 20000)),
     },
     entries: entries.map(e => ({
       ...e,

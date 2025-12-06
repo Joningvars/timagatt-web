@@ -10,6 +10,7 @@ import {
 import { useTranslations } from 'next-intl';
 import { useTimer } from '@/components/TimerProvider';
 import { Timer, Square, Pause, Play } from 'lucide-react';
+import { cn } from '@/lib/utils';
 
 type SidebarProps = {
   navSections: SidebarNavSection[];
@@ -17,6 +18,7 @@ type SidebarProps = {
   avatar: string;
   name: string;
   email: string;
+  className?: string;
 };
 
 import { useLocale } from 'next-intl';
@@ -27,6 +29,7 @@ export function Sidebar({
   avatar,
   name,
   email,
+  className,
 }: SidebarProps) {
   const t = useTranslations('Dashboard');
   const locale = useLocale();
@@ -44,7 +47,7 @@ export function Sidebar({
   };
 
   return (
-    <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex dark:shadow-none">
+    <aside className={cn("sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar shadow-[4px_0_24px_-12px_rgba(0,0,0,0.05)] md:flex dark:shadow-none", className)}>
       <div className="flex h-16 shrink-0 items-center border-b border-sidebar-border px-6">
         <div className="flex items-center gap-2.5">
           <div className="relative h-8 w-8">

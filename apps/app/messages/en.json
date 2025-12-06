@@ -146,6 +146,13 @@
         "thisWeek": "This Week",
         "thisMonth": "This Month",
         "thisYear": "This Year"
+      },
+      "searchResults": {
+        "noResults": "No results found.",
+        "features": "Features",
+        "entries": "Time Entries",
+        "projects": "Projects",
+        "expenses": "Expenses"
       }
     },
     "cta": {
@@ -161,10 +168,15 @@
       "projectNamePlaceholder": "Enter project name",
       "projectDescription": "Description",
       "projectDescriptionPlaceholder": "Enter project description",
+      "hourlyRate": "Hourly Rate",
       "projectColor": "Color",
       "create": "Create",
       "creating": "Creating...",
       "createSuccess": "Project created successfully",
+      "update": "Update",
+      "updating": "Updating...",
+      "updateSuccess": "Project updated successfully",
+      "editProjectDescription": "Update project details.",
       "newProjectDescription": "Create a new project to track time and expenses."
     },
     "entries": {
@@ -248,6 +260,79 @@
       "date": "Date",
       "amount": "Amount",
       "noExpenses": "No expenses found for this project"
+    }
+  },
+  "Export": {
+    "title": "Export & Reports",
+    "description": "Generate PDF reports or invoices for your projects.",
+    "configuration": "Export Configuration",
+    "configurationDesc": "Customize your export settings below.",
+    "dateRange": "Date Range",
+    "thisWeek": "This Week",
+    "thisMonth": "This Month",
+    "thisYear": "This Year",
+    "pickDate": "Pick a date",
+    "project": "Project",
+    "selectProject": "Select Project",
+    "allProjects": "All Projects",
+    "exportType": "Export Type",
+    "include": "Include",
+    "includeTimeLogs": "Time Logs",
+    "includeExpenses": "Expenses",
+    "groupBy": "Group By",
+    "groupByProject": "Project",
+    "groupByDate": "Date",
+    "groupByUser": "User",
+    "exportButton": "Export Data",
+    "preview": "Preview",
+    "previewPlaceholder": "Preview will appear here...",
+    "report": "Report",
+    "invoice": "Invoice",
+    "exportedOn": "Exported on",
+    "billTo": "Bill To:",
+    "invoiceNumber": "Invoice #:",
+    "clientName": "Client Name",
+    "addressLine1": "Address Line 1",
+    "cityCountry": "City, Country",
+    "totalDue": "Total Due:",
+    "totalHours": "Total Hours:",
+    "expensesTotal": "Expenses:",
+    "downloadCsv": "Download CSV",
+    "printPdf": "Print / Save as PDF",
+    "pdfReport": "PDF Report",
+    "csvExcel": "CSV / Excel",
+    "table": {
+      "date": "Date",
+      "project": "Project",
+      "description": "Description",
+      "hours": "Hours",
+      "amount": "Amount"
+    },
+    "sections": {
+      "timeEntries": "Time Entries",
+      "expenses": "Expenses"
+    },
+    "invoiceDetails": {
+      "title": "Invoice Details",
+      "clientName": "Client Name",
+      "clientAddress": "Address",
+      "clientCity": "City, Country",
+      "invoiceNumber": "Invoice Number",
+      "vatRate": "VAT Rate (%)",
+      "dueDate": "Due Date",
+      "issueDate": "Issue Date",
+      "notes": "Notes / Terms",
+      "selectClient": "Select Client",
+      "selectClientPlaceholder": "Choose a client...",
+      "createNewClient": "Create new client",
+      "saveClient": "Save Client",
+      "saveClientError": "Failed to save client",
+      "saveClientSuccess": "Client saved successfully",
+      "clientNameRequired": "Client name is required",
+      "clientNamePlaceholder": "Enter client name",
+      "addressPlaceholder": "Enter address",
+      "cityPlaceholder": "Enter city, country",
+      "notesPlaceholder": "Enter notes or terms"
     }
   }
 }

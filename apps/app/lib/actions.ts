@@ -14,6 +14,7 @@ const createJobSchema = z.object({
   name: z.string().min(1, 'Name is required'),
   description: z.string().optional(),
   color: z.string().optional(),
+  hourlyRate: z.string().transform((val) => parseInt(val)).optional().default('20000'),
 });
 
 const updateJobSchema = createJobSchema.partial().extend({
@@ -62,6 +63,7 @@ export async function createJob(formData: FormData) {
     name: formData.get('name'),
     description: formData.get('description'),
     color: formData.get('color'),
+    hourlyRate: formData.get('hourlyRate'),
   };
 
   const validatedFields = createJobSchema.safeParse(rawData);
@@ -102,6 +104,7 @@ export async function updateJob(id: number, formData: FormData) {
     name: formData.get('name'),
     description: formData.get('description'),
     color: formData.get('color'),
+    hourlyRate: formData.get('hourlyRate'),
   };
 
   const validatedFields = updateJobSchema.safeParse(rawData);

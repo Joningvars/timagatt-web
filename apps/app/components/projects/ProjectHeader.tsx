@@ -1,12 +1,6 @@
 import {
   ArrowLeft,
-  Calendar,
-  Clock,
-  CreditCard,
   MoreVertical,
-  Pencil,
-  Plus,
-  Settings,
   Trash2,
 } from 'lucide-react';
 import { useTranslations } from 'next-intl';
@@ -18,8 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu';
-import { Project } from '@/lib/dashboard/data';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { EditProjectDialog } from '@/components/dashboard/EditProjectDialog';
 
 type ProjectHeaderProps = {
   project: {
@@ -27,6 +20,7 @@ type ProjectHeaderProps = {
     name: string;
     description: string | null;
     color?: string | null;
+    hourlyRate?: number | null;
   };
   locale: string;
 };
@@ -76,10 +70,7 @@ export function ProjectHeader({ project, locale }: ProjectHeaderProps) {
         </div>
 
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="sm">
-            <Pencil className="mr-2 h-3.5 w-3.5" />
-            {t('edit')}
-          </Button>
+          <EditProjectDialog project={project} />
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon" className="h-8 w-8">

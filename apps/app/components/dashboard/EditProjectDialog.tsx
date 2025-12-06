@@ -15,13 +15,24 @@ import {
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { createJob } from '@/lib/actions';
+import { updateJob } from '@/lib/actions';
 import { toast } from 'sonner';
-import { Plus } from 'lucide-react';
+import { Pencil } from 'lucide-react';
 
-export function CreateProjectDialog() {
+type EditProjectDialogProps = {
+  project: {
+    id: number;
+    name: string;
+    description: string | null;
+    color?: string | null;
+    hourlyRate?: number | null;
+  };
+};
+
+export function EditProjectDialog({ project }: EditProjectDialogProps) {
   const [open, setOpen] = useState(false);
   const t = useTranslations('Dashboard.projects');
+  const tDetails = useTranslations('Projects.details');
   const [isLoading, setIsLoading] = useState(false);
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
@@ -29,12 +40,12 @@ export function CreateProjectDialog() {
     setIsLoading(true);
     
     const formData = new FormData(event.currentTarget);
-    const result = await createJob(formData);
+    const result = await updateJob(project.id, formData);
 
     if (result.error) {
       toast.error(result.error);
     } else {
-      toast.success(t('createSuccess'));
+      toast.success(t('updateSuccess'));
       setOpen(false);
     }
     setIsLoading(false);
@@ -43,17 +54,17 @@ export function CreateProjectDialog() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <Button className="flex items-center gap-2 cursor-pointer rounded-lg bg-foreground px-4 py-2 text-xs font-bold text-background shadow-md shadow-border transition hover:bg-foreground/90">
-          <Plus className="h-3.5 w-3.5" />
-          {t('newProject')}
+        <Button variant="outline" size="sm">
+          <Pencil className="mr-2 h-3.5 w-3.5" />
+          {tDetails('edit')}
         </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
-            <DialogTitle>{t('newProject')}</DialogTitle>
+            <DialogTitle>{tDetails('edit')}</DialogTitle>
             <DialogDescription>
-              {t('newProjectDescription')}
+              {t('editProjectDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -62,6 +73,7 @@ export function CreateProjectDialog() {
               <Input
                 id="name"
                 name="name"
+                defaultValue={project.name}
                 placeholder={t('projectNamePlaceholder')}
                 required
               />
@@ -71,6 +83,7 @@ export function CreateProjectDialog() {
               <Textarea
                 id="description"
                 name="description"
+                defaultValue={project.description || ''}
                 placeholder={t('projectDescriptionPlaceholder')}
               />
             </div>
@@ -80,7 +93,7 @@ export function CreateProjectDialog() {
                 id="hourlyRate"
                 name="hourlyRate"
                 type="number"
-                defaultValue="20000"
+                defaultValue={project.hourlyRate || '20000'}
                 placeholder="20000"
               />
             </div>
@@ -98,7 +111,13 @@ export function CreateProjectDialog() {
                     "bg-orange-500",
                 ].map((colorClass) => (
                     <label key={colorClass} className="cursor-pointer">
-                        <input type="radio" name="color" value={colorClass} className="peer sr-only" />
+                        <input 
+                            type="radio" 
+                            name="color" 
+                            value={colorClass} 
+                            defaultChecked={project.color === colorClass}
+                            className="peer sr-only" 
+                        />
                         <div className={`h-6 w-6 rounded-full ${colorClass} ring-offset-2 peer-checked:ring-2 peer-checked:ring-slate-900 peer-focus:ring-2 peer-focus:ring-slate-900`}></div>
                     </label>
                 ))}
@@ -107,7 +126,7 @@ export function CreateProjectDialog() {
           </div>
           <DialogFooter>
             <Button type="submit" disabled={isLoading}>
-                {isLoading ? t('creating') : t('create')}
+                {isLoading ? t('updating') : t('update')}
             </Button>
           </DialogFooter>
         </form>

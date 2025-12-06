@@ -27,6 +27,7 @@ export const users = mysqlTable("users", {
 export const usersRelations = relations(users, ({ many }) => ({
   memberships: many(organizationMembers),
   projects: many(projects), // Personal projects
+  clients: many(clients), // Personal clients
   timeEntries: many(timeEntries),
   expenses: many(expenses),
 }));
@@ -46,6 +47,7 @@ export const organizations = mysqlTable("organizations", {
 export const organizationsRelations = relations(organizations, ({ many }) => ({
   members: many(organizationMembers),
   projects: many(projects),
+  clients: many(clients),
 }));
 
 // Organization Members
@@ -72,6 +74,33 @@ export const organizationMembersRelations = relations(organizationMembers, ({ on
   }),
 }));
 
+// Clients
+export const clients = mysqlTable("clients", {
+  id: int("id").autoincrement().primaryKey(),
+  name: varchar("name", { length: 191 }).notNull(),
+  contactPerson: varchar("contact_person", { length: 191 }),
+  email: varchar("email", { length: 191 }),
+  address: text("address"),
+  city: varchar("city", { length: 191 }),
+  vatNumber: varchar("vat_number", { length: 191 }),
+  bankAccount: varchar("bank_account", { length: 191 }), // Added bankAccount
+  organizationId: int("organization_id").references(() => organizations.id),
+  userId: varchar("user_id", { length: 191 }).references(() => users.id),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const clientsRelations = relations(clients, ({ one }) => ({
+  organization: one(organizations, {
+    fields: [clients.organizationId],
+    references: [organizations.id],
+  }),
+  user: one(users, {
+    fields: [clients.userId],
+    references: [users.id],
+  }),
+}));
+
 // Projects
 export const projects = mysqlTable("projects", {
   id: int("id").autoincrement().primaryKey(),
@@ -80,6 +109,8 @@ export const projects = mysqlTable("projects", {
   color: varchar("color", { length: 64 }),
   organizationId: int("organization_id").references(() => organizations.id),
   userId: varchar("user_id", { length: 191 }).references(() => users.id), // For personal projects
+  clientId: int("client_id").references(() => clients.id), // Link to client
+  hourlyRate: int("hourly_rate").default(20000), // Default hourly rate in ISK
   isArchived: boolean("is_archived").default(false).notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
@@ -93,6 +124,10 @@ export const projectsRelations = relations(projects, ({ one, many }) => ({
   user: one(users, {
     fields: [projects.userId],
     references: [users.id],
+  }),
+  client: one(clients, {
+    fields: [projects.clientId],
+    references: [clients.id],
   }),
   timeEntries: many(timeEntries),
   expenses: many(expenses),
@@ -152,4 +187,3 @@ export const expensesRelations = relations(expenses, ({ one }) => ({
     references: [projects.id],
   }),
 }));
-

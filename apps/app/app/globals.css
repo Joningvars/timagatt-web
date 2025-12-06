@@ -136,6 +136,13 @@
   body {
     @apply bg-background text-foreground overflow-x-hidden;
   }
+  button, [role="button"], [type="button"], [type="submit"], [type="reset"] {
+    @apply cursor-pointer;
+  }
+  /* Fix disabled state overriding cursor */
+  button:disabled, [role="button"][aria-disabled="true"] {
+    @apply cursor-not-allowed;
+  }
 }
 
 .custom-scrollbar::-webkit-scrollbar {
